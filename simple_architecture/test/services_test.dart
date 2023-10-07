@@ -183,6 +183,58 @@ void main() {
       throwsA(const TypeMatcher<StateError>()),
     );
   });
+
+  test("Dependences should be injected in transient", () async {
+    purgeAll();
+
+    $.services.registerTransient<Dependencies>(
+      (get) => Dependencies(
+        abstract: get<IAbstract>(),
+        initializableAbstract: get<IInitializableAbstract>(),
+      ),
+    );
+
+    $.services.registerTransient<IAbstract>((get) => Concrete());
+
+    $.services.registerTransient<IInitializableAbstract>(
+      (get) => InitializableConcrete(),
+    );
+
+    await $.services.initializeAsync();
+
+    final d1 = $.services.get<Dependencies>();
+    final d2 = $.services.get<Dependencies>();
+
+    expect(Concrete, d1.abstract.runtimeType);
+    expect(InitializableConcrete, d1.initializableAbstract.runtimeType);
+    expect(identical(d1.abstract, d2.abstract), false);
+  });
+
+  test("Dependences should be injected in singleton", () async {
+    purgeAll();
+
+    $.services.registerTransient<Dependencies>(
+      (get) => Dependencies(
+        abstract: get<IAbstract>(),
+        initializableAbstract: get<IInitializableAbstract>(),
+      ),
+    );
+
+    $.services.registerSingleton<IAbstract>((get) => Concrete());
+
+    $.services.registerSingleton<IInitializableAbstract>(
+      (get) => InitializableConcrete(),
+    );
+
+    await $.services.initializeAsync();
+
+    final d1 = $.services.get<Dependencies>();
+    final d2 = $.services.get<Dependencies>();
+
+    expect(Concrete, d1.abstract.runtimeType);
+    expect(InitializableConcrete, d1.initializableAbstract.runtimeType);
+    expect(identical(d1.abstract, d2.abstract), true);
+  });
 }
 
 abstract interface class IAbstract {
@@ -255,4 +307,14 @@ final class BootableConcrete implements IBootableAbstract {
   Future<void> initializeAsync() async {
     _bootCount++;
   }
+}
+
+final class Dependencies {
+  const Dependencies({
+    required this.abstract,
+    required this.initializableAbstract,
+  });
+
+  final IAbstract abstract;
+  final IInitializableAbstract initializableAbstract;
 }
