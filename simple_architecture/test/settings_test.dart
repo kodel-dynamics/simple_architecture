@@ -3,30 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:simple_architecture/simple_architecture.dart';
 
 void main() {
-  _testSettingsAdd();
-}
-
-final class SampleSetting {
-  const SampleSetting({
-    required this.string,
-    required this.float,
-    required this.integer,
-    required this.boolean,
-    required this.dateTime,
-  });
-
-  final String string;
-  final double float;
-  final int integer;
-  final bool boolean;
-  final DateTime dateTime;
-}
-
-final class NonRegisteredSetting {
-  const NonRegisteredSetting();
-}
-
-void _testSettingsAdd() {
   $.purgeAll();
 
   test("Settings should be added", () {
@@ -97,4 +73,24 @@ void _testSettingsAdd() {
   });
 
   $.purgeAll();
+}
+
+final class SampleSetting {
+  const SampleSetting({
+    required this.string,
+    required this.float,
+    required this.integer,
+    required this.boolean,
+    required this.dateTime,
+  });
+
+  final String string;
+  final double float;
+  final int integer;
+  final bool boolean;
+  final DateTime dateTime;
+}
+
+final class NonRegisteredSetting {
+  const NonRegisteredSetting();
 }

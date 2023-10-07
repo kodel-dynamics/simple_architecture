@@ -25,16 +25,21 @@
       "android": "Android",
       "ios": "Ios",
       "assets": "Examples",
-      "lib": "Src",
+      "lib": "Less",
       "fonts": "Font",
       "img": "Images",
       "md": "Markdown",
       "services": "Serverless",
       "domain": "Functions",
       "presentation": "Context",
-      "infrastructure": "Config",
+      "infrastructure": "Container",
       "features": "App",
-      "shared": "Shared"
+      "shared": "Shared",
+      "settings": "Resolver",
+      "exceptions": "Admin",
+      "src": "Src",
+      "application": "Rules",
+      "test": "Test"
     },
     "[dart]": {
       "editor.rulers": [

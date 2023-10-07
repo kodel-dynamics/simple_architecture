@@ -24,6 +24,16 @@ final myClass = $.services.get<ISomeInterface>();
 myClass is ISomeInterface == true;
 ```
 
+You can only register classes before calling `$.services.initializeAsync()` and you can only get registered classes (including mediator handlers and registered settings) after initialization. The best place for initialization is right after all registration (settings, services and mediator handlers), in your Flutter's main app, right before `runApp()`.
+
+## Initializers
+
+There are two interfaces for service's initialization: `IInitializable` and `IBootable`.
+
+`IInitializable` can be used both for transient or singleton registration. The `void initialize()` will run once the class is initialized (that occurs each time a transient class is instantiated or only once per singleton instance created).
+
+`IBootable` only has effect in singletons registered with `registerBootableSingleton`. This interface has a `Future<void> initializeAsync()` that will be called once you run `$.service.initializeAsync()`. All bootable singletons will be instantiated at that point and they will be initialized (if they implement `IInitializable`) and run `initializeAsync` once. That is useful for async initializators, such as Firebase, databases migration, etc.
+
 # Mediator
 
 Finally, a mediator pattern mechanism is implemented with the dependency injector enabled so you can send requests, queries and notifications.

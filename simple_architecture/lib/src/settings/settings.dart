@@ -22,7 +22,8 @@ final class Settings {
   /// Adds a setting in the [Settings] mechanics and register it as a singleton
   /// in the [Services] and [Mediator] dependency injector.
   ///
-  /// Throws a [DuplicatedElementException] if [T] is already registered.
+  /// Throws:
+  /// * [DuplicatedElementException] if [T] is already registered.
   void add<T>(T setting) {
     if (_settings.containsKey(T)) {
       throw DuplicatedElementException(
@@ -31,14 +32,15 @@ final class Settings {
     }
 
     _settings[T] = setting;
-    // TODO: $.services.registerSingletonInstance(setting);
+    $.services._replaceSingletonInstance(setting);
     _logger.config("Setting ${T} registered");
     _logger.debug(() => setting.toString());
   }
 
   /// Gets a registered setting of type [T].
   ///
-  /// Throws an [ElementNotFoundException] if [T] isn't registered.
+  /// Throws:
+  /// * [ElementNotFoundException] if [T] wasn't registered.
   T get<T>() {
     final setting = _settings[T];
 
@@ -54,7 +56,8 @@ final class Settings {
   /// Replaces a previous registered setting of type [T]. This can be useful
   /// when using Firebase Remote Config and the remote config has changed.
   ///
-  /// Throws an [ElementNotFoundException] if [T] isn't registered.
+  /// Throws:
+  /// * [ElementNotFoundException] if [T] wasn't registered.
   void replace<T>(T setting) {
     if (_settings.containsKey(T) == false) {
       throw ElementNotFoundException(
@@ -63,7 +66,7 @@ final class Settings {
     }
 
     _settings[T] = setting;
-    // TODO:$.services._replaceSingletonInstance(setting);
+    $.services._replaceSingletonInstance(setting);
     _logger.config("Setting ${T} replaced");
     _logger.debug(() => setting.toString());
   }
