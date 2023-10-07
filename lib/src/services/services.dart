@@ -46,7 +46,7 @@ final class Services {
   void registerTransient<TAbstract>(
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    _logger.config("Registering ${TAbstract} transient");
+    _logger.config("Registering $TAbstract transient");
     _registerIn(_transientFactories, delegate);
   }
 
@@ -65,7 +65,7 @@ final class Services {
   void registerSingleton<TAbstract>(
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    _logger.config("Registering ${TAbstract} singleton");
+    _logger.config("Registering $TAbstract singleton");
     _registerIn(_singletonFactories, delegate);
   }
 
@@ -86,7 +86,7 @@ final class Services {
   void registerBootableSingleton<TAbstract extends IBootable>(
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    _logger.config("Registering ${TAbstract} bootable singleton");
+    _logger.config("Registering $TAbstract bootable singleton");
     _registerIn(_bootableFactories, delegate);
   }
 
@@ -102,13 +102,13 @@ final class Services {
     }
     if (_transientFactories.containsKey(TAbstract)) {
       throw DuplicatedElementException(
-        message: "There is already a transient of type ${TAbstract} registered",
+        message: "There is already a transient of type $TAbstract registered",
       );
     }
 
     if (_singletonFactories.containsKey(TAbstract)) {
       throw DuplicatedElementException(
-        message: "There is already a singleton of type ${TAbstract} registered",
+        message: "There is already a singleton of type $TAbstract registered",
       );
     }
 
@@ -176,7 +176,7 @@ final class Services {
     if (transientFactory == null) {
       throw ElementNotFoundException(
         message: "There is no registered transient or singleton service "
-            "of type ${TAbstract}",
+            "of type $TAbstract",
       );
     }
 
@@ -188,30 +188,30 @@ final class Services {
     _FactoryDelegate factory,
     bool isTransient,
   ) {
-    _logger.info("Instantiating ${abstractType}");
+    _logger.info("Instantiating $abstractType");
 
     final instance = factory(_get);
-    final abstractTypeName = "${abstractType}";
+    final abstractTypeName = "$abstractType";
     final concreteTypeName = "${instance.runtimeType}";
 
     final typeName = abstractTypeName == concreteTypeName
         ? abstractTypeName
-        : "${concreteTypeName} as ${abstractTypeName}";
+        : "$concreteTypeName as $abstractTypeName";
 
     final registryType = isTransient ? "transient" : "singleton";
 
     _logger.info(
-      "${instance.runtimeType} instantiated as ${abstractType} ${registryType}",
+      "${instance.runtimeType} instantiated as $abstractType $registryType",
     );
 
     if (instance is IInitializable) {
-      _logger.info("Initializing ${registryType} ${typeName}");
+      _logger.info("Initializing $registryType $typeName");
       instance.initialize();
     }
 
     if (instance is IBootable && isTransient) {
       _logger.warning(
-        "Boot of ${registryType} ${typeName} will be ignored "
+        "Boot of $registryType $typeName will be ignored "
         "because it is transient",
       );
     }

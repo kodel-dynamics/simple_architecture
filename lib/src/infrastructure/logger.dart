@@ -64,7 +64,7 @@ final class Logger<T> {
     _log(
       "⛔E",
       AnsiColors.red,
-      exception == null ? message : "${message}\n${exception}",
+      exception == null ? message : "$message\n$exception",
     );
 
     if (kDebugMode && stackTrace != null) {
@@ -116,7 +116,7 @@ final class Logger<T> {
   }
 
   void _log(String header, AnsiColors color, String message) {
-    final logName = "${T}".startsWith("_") ? "${T}".substring(1) : "${T}";
+    final logName = "$T".startsWith("_") ? "$T".substring(1) : "$T";
     final titleKey = "$logName:${header.substring(header.length - 1)}";
     var title = _titles[titleKey];
 
@@ -180,15 +180,15 @@ final class Logger<T> {
             "${logName.substring(c + 1)}"
             "\x1b[38;2;"
             "${titleColor.red};${titleColor.green};${titleColor.blue}m"
-            "[${logName}] ${color}";
+            "[$logName] $color";
       } else {
         title = _titles[titleKey] = "\x1b[38;2;${titleColor.red};"
             "${titleColor.green};${titleColor.blue}m"
-            "[${logName}] ${color}";
+            "[$logName] $color";
       }
     }
 
-    message = message.replaceAll("${AnsiColors.reset}", "${color}");
-    Dev.log("${title}${message}", name: header);
+    message = message.replaceAll("${AnsiColors.reset}", "$color");
+    Dev.log("$title$message", name: header);
   }
 }

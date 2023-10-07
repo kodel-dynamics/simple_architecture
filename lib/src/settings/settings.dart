@@ -27,13 +27,13 @@ final class Settings {
   void add<T>(T setting) {
     if (_settings.containsKey(T)) {
       throw DuplicatedElementException(
-        message: "There is already a setting of type ${T} registered",
+        message: "There is already a setting of type $T registered",
       );
     }
 
     _settings[T] = setting;
     $.services._replaceSingletonInstance(setting);
-    _logger.config("Setting ${T} registered");
+    _logger.config("Setting $T registered");
     _logger.debug(() => setting.toString());
   }
 
@@ -46,7 +46,7 @@ final class Settings {
 
     if (setting == null) {
       throw ElementNotFoundException(
-        message: "There is no registered setting of type ${T}",
+        message: "There is no registered setting of type $T",
       );
     }
 
@@ -61,13 +61,13 @@ final class Settings {
   void replace<T>(T setting) {
     if (_settings.containsKey(T) == false) {
       throw ElementNotFoundException(
-        message: "There is no registered setting of type ${T}",
+        message: "There is no registered setting of type $T",
       );
     }
 
     _settings[T] = setting;
     $.services._replaceSingletonInstance(setting);
-    _logger.config("Setting ${T} replaced");
+    _logger.config("Setting $T replaced");
     _logger.debug(() => setting.toString());
   }
 }
