@@ -21,14 +21,11 @@ final class Services {
   final _singletonInstances = <Type, dynamic>{};
   final _logger = Logger<Services>();
 
-  bool _isInitialized = false;
-
   void _purgeAll() {
     _transientFactories.clear();
     _singletonFactories.clear();
     _bootableFactories.clear();
     _singletonInstances.clear();
-    _isInitialized = false;
   }
 
   /// Registers a factory that will build a new instance of [TAbstract] when
@@ -94,7 +91,7 @@ final class Services {
     Map<Type, _FactoryDelegate> where,
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    if (_isInitialized) {
+    if ($._isInitialized) {
       throw StateError(
         "You cannot register new abstract classes when Services is already "
         "initialized",
@@ -115,33 +112,6 @@ final class Services {
     where[TAbstract] = delegate;
   }
 
-  /// Initializes [Services], instantiating every [IBootable] singletons and
-  /// initializing them as well.
-  ///
-  /// This function is safe to run multiple times, as [Services] will only be
-  /// initialized once.
-  ///
-  /// After initialization, you can't register types anymore.
-  Future<void> initializeAsync() async {
-    if (_isInitialized) {
-      return;
-    }
-
-    _logger.config("Initializing");
-
-    for (final entry in _bootableFactories.entries) {
-      final instance = _createSingletonInstance(
-        entry.key,
-        entry.value,
-      ) as IBootable;
-
-      _logger.config("Booting ${entry.key}");
-      await instance.initializeAsync();
-    }
-
-    _isInitialized = true;
-  }
-
   /// Gets an instance of the registered [TAbstract] class.
   ///
   /// If [TAbstract] extends [IInitializable], it will run once it is
@@ -151,7 +121,7 @@ final class Services {
   /// * [ElementNotFoundException] if [TAbstract] wasn't registered.
   /// * [StateError] if [Services] isn't initialized.
   TAbstract get<TAbstract>() {
-    if (_isInitialized == false) {
+    if ($._isInitialized == false) {
       throw StateError("You need to initialize Services before using get");
     }
 

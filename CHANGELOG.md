@@ -6,3 +6,6 @@
 
 ## 0.231007.2
 * Refactorings to please Pana
+
+## 0.231010.1
+* Mediator pattern implemented

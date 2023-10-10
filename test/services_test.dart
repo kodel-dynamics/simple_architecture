@@ -13,11 +13,12 @@ void purgeAll() {
 }
 
 void main() {
+  setUp(purgeAll);
+
   test("Transient should be registered", () async {
-    purgeAll();
     $.services.registerTransient<IAbstract>((get) => Concrete());
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     final c = $.services.get<IAbstract>();
 
@@ -28,14 +29,12 @@ void main() {
     final c2 = $.services.get<IAbstract>();
 
     expect(identical(c, c2), false);
-    purgeAll();
   });
 
   test("Singletons should be registered", () async {
-    purgeAll();
     $.services.registerSingleton<IAbstract>((get) => Concrete());
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     final c = $.services.get<IAbstract>();
 
@@ -44,11 +43,9 @@ void main() {
     final c2 = $.services.get<IAbstract>();
 
     expect(identical(c, c2), true);
-    purgeAll();
   });
 
   test("Duplicate registration should throw", () {
-    purgeAll();
     $.services.registerSingleton<IAbstract>((get) => Concrete());
 
     expect(
@@ -76,9 +73,7 @@ void main() {
   });
 
   test("Non existing registration should throw", () async {
-    purgeAll();
-
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     expect(
       () => $.services.get<IAbstract>(),
@@ -87,14 +82,13 @@ void main() {
   });
 
   test("Transient instances should initialize correctly", () async {
-    purgeAll();
     $.services.registerTransient<IAbstract>((get) => Concrete());
 
     $.services.registerTransient<IInitializableAbstract>(
       (get) => InitializableConcrete(),
     );
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     expect($.services.get<IAbstract>().initializationCount, 0);
     expect($.services.get<IAbstract>().initializationCount, 0);
@@ -106,14 +100,13 @@ void main() {
   });
 
   test("Singleton instances should initialize correctly", () async {
-    purgeAll();
     $.services.registerSingleton<IAbstract>((get) => Concrete());
 
     $.services.registerSingleton<IInitializableAbstract>(
       (get) => InitializableConcrete(),
     );
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     expect($.services.get<IAbstract>().initializationCount, 0);
     expect($.services.get<IAbstract>().initializationCount, 0);
@@ -125,14 +118,13 @@ void main() {
   });
 
   test("Singleton bootable should initialize correctly", () async {
-    purgeAll();
     $.services.registerSingleton<IAbstract>((get) => Concrete());
 
     $.services.registerBootableSingleton<IBootableAbstract>(
       (get) => BootableConcrete(),
     );
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     expect($.services.get<IAbstract>().initializationCount, 0);
     expect($.services.get<IAbstract>().initializationCount, 0);
@@ -145,14 +137,13 @@ void main() {
   });
 
   test("Transient bootable should not boot", () async {
-    purgeAll();
     $.services.registerTransient<IAbstract>((get) => Concrete());
 
     $.services.registerTransient<IBootableAbstract>(
       (get) => BootableConcrete(),
     );
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     expect($.services.get<IAbstract>().initializationCount, 0);
     expect($.services.get<IAbstract>().initializationCount, 0);
@@ -165,8 +156,6 @@ void main() {
   });
 
   test("Get should throw before initialization", () {
-    purgeAll();
-
     expect(
       () => $.services.get<IAbstract>(),
       throwsA(const TypeMatcher<StateError>()),
@@ -174,9 +163,7 @@ void main() {
   });
 
   test("Register should throw after initialization", () async {
-    purgeAll();
-
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     expect(
       () => $.services.registerTransient<IAbstract>((get) => Concrete()),
@@ -185,8 +172,6 @@ void main() {
   });
 
   test("Dependences should be injected in transient", () async {
-    purgeAll();
-
     $.services.registerTransient<Dependencies>(
       (get) => Dependencies(
         abstract: get<IAbstract>(),
@@ -200,7 +185,7 @@ void main() {
       (get) => InitializableConcrete(),
     );
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     final d1 = $.services.get<Dependencies>();
     final d2 = $.services.get<Dependencies>();
@@ -211,8 +196,6 @@ void main() {
   });
 
   test("Dependences should be injected in singleton", () async {
-    purgeAll();
-
     $.services.registerTransient<Dependencies>(
       (get) => Dependencies(
         abstract: get<IAbstract>(),
@@ -226,7 +209,7 @@ void main() {
       (get) => InitializableConcrete(),
     );
 
-    await $.services.initializeAsync();
+    await $.initializeAsync();
 
     final d1 = $.services.get<Dependencies>();
     final d2 = $.services.get<Dependencies>();
