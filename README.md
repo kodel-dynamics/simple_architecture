@@ -3,12 +3,12 @@ Pub Package: https://pub.dev/packages/simple_architecture
 The Simple Architecture package provides three pillars to build apps upon:
 
 # Features
-- [x] Settings
-- [x] Services (service locator & dependency injection)
-- [x] Mediator pattern
-- [ ] Flutter UI utilities
-- [ ] Null Safe & Exception Safe results
-- [ ] Example project
+- ☑ Settings
+- ☑ Services (service locator & dependency injection)
+- ☑ Mediator pattern
+- ☐ Flutter UI utilities
+- ☐ Null Safe & Exception Safe results
+- ☐ Example project
 
 # Settings
 

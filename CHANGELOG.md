@@ -9,3 +9,6 @@
 
 ## 0.231010.1
 * Mediator pattern implemented
+
+## 0.231010.2
+* Fix missing markdown features on pub.dev
