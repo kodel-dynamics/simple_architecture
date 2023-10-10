@@ -75,21 +75,23 @@ final class Mediator {
   /// You can choose whether your handler is registered as a transient (when
   /// your request handler class hasn't state on it) or singleton (when your
   /// request handler class has global state on it).
-  void registerRequestHandler<TResponse, TRequest extends IRequest<TResponse>>(
-    IRequestHandler<TResponse, TRequest> Function(GetDelegate get)
+  void registerRequestHandler<TResponse>(
+    IRequestHandler<TResponse, IRequest<TResponse>> Function(GetDelegate get)
         handlerFactory, {
     bool registerAsTransient = true,
   }) {
     if (registerAsTransient) {
-      _logger.config("Registering $TRequest as transient");
+      _logger.config("Registering ${IRequest<TResponse>} as transient");
 
-      $.services.registerTransient<IRequestHandler<TResponse, TRequest>>(
+      $.services
+          .registerTransient<IRequestHandler<TResponse, IRequest<TResponse>>>(
         handlerFactory,
       );
     } else {
-      _logger.config("Registering $TRequest as singleton");
+      _logger.config("Registering ${IRequest<TResponse>} as singleton");
 
-      $.services.registerSingleton<IRequestHandler<TResponse, TRequest>>(
+      $.services
+          .registerSingleton<IRequestHandler<TResponse, IRequest<TResponse>>>(
         handlerFactory,
       );
     }
@@ -199,20 +201,21 @@ final class Mediator {
   /// The pipeline will run in the order specify by priority (the lower, the
   /// sooner) and the rest of pipeline (and even the registered handler) can
   /// be skipped when [cancellationToken] is cancelled.
-  Future<TResponse> send<TResponse, TRequest extends IRequest<TResponse>>(
-    TRequest request,
+  Future<TResponse> send<TResponse>(
+    IRequest<TResponse> request,
   ) async {
     _logger.info("Sending ${request.runtimeType}");
     _logger.debug(() => request.toString());
 
-    final handler = $.services.get<IRequestHandler<TResponse, TRequest>>();
+    final handler =
+        $.services.get<IRequestHandler<TResponse, IRequest<TResponse>>>();
 
     if (_pipeline.isEmpty) {
       return handler.handle(request);
     }
 
     final cancellationToken = CancellationToken(
-      operationName: "Pipeline for $TRequest",
+      operationName: "Pipeline for ${IRequest<TResponse>}",
     );
 
     TResponse? currentResponse;

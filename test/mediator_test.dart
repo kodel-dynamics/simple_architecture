@@ -21,53 +21,45 @@ void main() {
   setUp(purgeAll);
 
   test("Mediators should work as transient", () async {
-    $.mediator.registerRequestHandler<bool, TestRequest>(
+    $.mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: true,
     );
 
     await $.initializeAsync();
 
-    final response = await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    final response = await $.mediator.send(const TestRequest());
 
     expect(response, true);
     expect(TestRequestHandler.runCount, 1);
 
-    final response2 = await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    final response2 = await $.mediator.send(const TestRequest());
 
     expect(response2, true);
     expect(TestRequestHandler.runCount, 2);
   });
 
   test("Mediators should work as singleton", () async {
-    $.mediator.registerRequestHandler<bool, TestRequest>(
+    $.mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: false,
     );
 
     await $.initializeAsync();
 
-    final response = await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    final response = await $.mediator.send(const TestRequest());
 
     expect(response, true);
     expect(TestRequestHandler.runCount, 1);
 
-    final response2 = await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    final response2 = await $.mediator.send(const TestRequest());
 
     expect(response2, false);
     expect(TestRequestHandler.runCount, 2);
   });
 
   test("Pipeline behaviors as transient", () async {
-    $.mediator.registerRequestHandler<bool, TestRequest>(
+    $.mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: true,
     );
@@ -86,17 +78,13 @@ void main() {
 
     await $.initializeAsync();
 
-    await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    await $.mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 1);
     expect(Priority20PipelineBehavior.runCount, 1);
     expect(pipelineBehaviorPriorityOrder, [10, 20]);
 
-    await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    await $.mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 2);
     expect(Priority20PipelineBehavior.runCount, 2);
@@ -104,7 +92,7 @@ void main() {
   });
 
   test("Pipeline behaviors as singleton", () async {
-    $.mediator.registerRequestHandler<bool, TestRequest>(
+    $.mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: false,
     );
@@ -123,17 +111,13 @@ void main() {
 
     await $.initializeAsync();
 
-    await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    await $.mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 1);
     expect(Priority20PipelineBehavior.runCount, 1);
     expect(pipelineBehaviorPriorityOrder, [10, 20]);
 
-    await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    await $.mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 2);
     expect(Priority20PipelineBehavior.runCount, 2);
@@ -238,15 +222,13 @@ void main() {
       registerAsTransient: false,
     );
 
-    $.mediator.registerRequestHandler<bool, TestRequest>(
+    $.mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
     );
 
     await $.initializeAsync();
 
-    await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    await $.mediator.send(const TestRequest());
 
     expect(CancelledPipelineBehavior.runCount, 1);
     expect(Priority10PipelineBehavior.runCount, 0);
@@ -265,15 +247,13 @@ void main() {
       registerAsTransient: false,
     );
 
-    $.mediator.registerRequestHandler<bool, TestRequest>(
+    $.mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
     );
 
     await $.initializeAsync();
 
-    await $.mediator.send<bool, TestRequest>(
-      const TestRequest(),
-    );
+    await $.mediator.send(const TestRequest());
 
     expect(CancelledWithErrorPipelineBehavior.runCount, 1);
     expect(Priority10PipelineBehavior.runCount, 0);
@@ -343,8 +323,8 @@ void main() {
     );
 
     await $.initializeAsync();
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
+    await $.mediator.send(const TestRequest());
+    await $.mediator.send(const TestRequest());
 
     expect(InitializablePipelineBehavior.initializeCount, 2);
   });
@@ -362,8 +342,8 @@ void main() {
     );
 
     await $.initializeAsync();
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
+    await $.mediator.send(const TestRequest());
+    await $.mediator.send(const TestRequest());
 
     expect(InitializablePipelineBehavior.initializeCount, 1);
   });
@@ -375,8 +355,8 @@ void main() {
     );
 
     await $.initializeAsync();
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
+    await $.mediator.send(const TestRequest());
+    await $.mediator.send(const TestRequest());
 
     expect(InitializableTestRequestHandler.initializeCount, 2);
   });
@@ -388,8 +368,8 @@ void main() {
     );
 
     await $.initializeAsync();
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
-    await $.mediator.send<bool, TestRequest>(const TestRequest());
+    await $.mediator.send(const TestRequest());
+    await $.mediator.send(const TestRequest());
 
     expect(InitializableTestRequestHandler.initializeCount, 1);
   });
