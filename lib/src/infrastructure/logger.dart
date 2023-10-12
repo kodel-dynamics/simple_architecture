@@ -96,7 +96,7 @@ final class Logger<T> {
       return;
     }
 
-    _log("🟢C", AnsiColors.cyan, message);
+    _log("🟢C", AnsiColors.green, message);
   }
 
   void debug(String Function() messageFactory) {
@@ -171,16 +171,15 @@ final class Logger<T> {
               .toColor();
         }
 
-        title = _titles[titleKey] = "${logName.substring(0, o)}"
+        title = _titles[titleKey] = "\x1b[38;2;"
+            "${titleColor.red};${titleColor.green};${titleColor.blue}m"
+            "[${logName.substring(0, o)}"
             "\x1b[38;2;"
             "${titleSColor.red};${titleSColor.green};${titleSColor.blue}m"
             "${logName.substring(o, c + 1)}"
             "\x1b[38;2;"
             "${titleColor.red};${titleColor.green};${titleColor.blue}m"
-            "${logName.substring(c + 1)}"
-            "\x1b[38;2;"
-            "${titleColor.red};${titleColor.green};${titleColor.blue}m"
-            "[$logName] $color";
+            "] $color";
       } else {
         title = _titles[titleKey] = "\x1b[38;2;${titleColor.red};"
             "${titleColor.green};${titleColor.blue}m"

@@ -51,13 +51,13 @@ final class Mediator {
       if (singletonFactory != null) {
         _logger.config("Instantiating singleton pipeline behavior #$priority");
 
-        final instance = singletonFactory($.services.get);
+        final instance = singletonFactory($.services._get);
 
         _pipeline.add((() => instance, false));
       } else {
         final transientFactory = _transientPipelines[priority];
 
-        _pipeline.add((() => transientFactory!($.services.get), true));
+        _pipeline.add((() => transientFactory!($.services._get), true));
       }
 
       _pipelineInitialized.add(false);

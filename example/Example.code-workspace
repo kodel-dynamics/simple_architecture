@@ -1,0 +1,50 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Flutter",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "debug",
+        "args": [
+          "--web-port",
+          "5858"
+        ]
+      }
+    ],
+  },
+  "settings": {
+    "dart.lineLength": 80,
+    "material-icon-theme.folders.associations": {
+      "android": "Android",
+      "ios": "Ios",
+      "assets": "Examples",
+      "lib": "Less",
+      "fonts": "Font",
+      "img": "Images",
+      "md": "Markdown",
+      "services": "Serverless",
+      "domain": "Functions",
+      "presentation": "Context",
+      "infrastructure": "Container",
+      "features": "App",
+      "shared": "Shared",
+      "settings": "Resolver",
+      "exceptions": "Admin",
+      "src": "Src",
+      "application": "Rules",
+      "test": "Test"
+    },
+    "[dart]": {
+      "editor.rulers": [
+        80
+      ]
+    }
+  }
+}

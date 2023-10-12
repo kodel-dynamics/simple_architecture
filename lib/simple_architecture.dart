@@ -3,7 +3,8 @@ library simple_architecture;
 import 'dart:developer' as Dev;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:rxdart/rxdart.dart';
 
@@ -14,6 +15,7 @@ part 'src/application/mediator.dart';
 part 'src/exceptions/duplicated_element_exception.dart';
 part 'src/exceptions/element_not_found_exception.dart';
 part 'src/infrastructure/logger.dart';
+part 'src/presentation/mediator_notification_listener.dart';
 part 'src/services/i_bootable.dart';
 part 'src/services/i_initializable.dart';
 part 'src/services/services.dart';
