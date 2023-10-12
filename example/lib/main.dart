@@ -1,49 +1,116 @@
 import 'package:flutter/material.dart';
 
-import 'package:example/features/auth/domain/base_authentication_service.dart';
-
 import 'package:simple_architecture/simple_architecture.dart';
 
-import 'app.dart';
-import 'features/auth/services/fake_authentication_service.dart';
-import 'features/error_handling/domain/global_error_handler_pipeline_behavior.dart';
-import 'features/error_handling/domain/i_global_error_handler_service.dart';
-import 'features/error_handling/services/fake_global_error_handler_service.dart';
-
 Future<void> main() async {
-  // Register settings, services and mediators
+  // Register state management
+  $states.registerState((get) => CounterState());
 
-  // This pipeline behavior will add a try/catch into every request made, so
-  // it can be used, for example, as a Crashlytics/Sentry exception log.
-  $.mediator.registerPipelineBehavior(
-    // a 0 priority means that this will be the first behavior to run in the
-    // pipeline (meaning that any other behavior and the actual request message
-    // handling will occur inside this behavior, perfect for a global try/catch)
-    0,
-    (get) => GlobalErrorHandlerPipelineBehavior(
-      // We need an instance of [IGlobalErrorHandlerService] here. That will
-      // be registered in some other place and we don't need to worry with
-      // anything (except that MUST be registered eventualy)
-      globalErrorHandlerService: get<IGlobalErrorHandlerService>(),
-    ),
-    registerAsTransient: false,
-  );
-
-  // Whomever needs a [IGlobalErrorHandlerService], we give it an instance of
-  // [FakeGlobalErrorHandlerService]
-  $.services.registerSingleton<IGlobalErrorHandlerService>(
-    (get) => const FakeGlobalErrorHandlerService(),
-  );
-
-  // Check [BaseAuthenticationService] for explanation why this class is
-  // registered using `registerBootableSingleton`
-  $.services.registerBootableSingleton<BaseAuthenticationService>(
-    (get) => const FakeAuthenticationService(),
+  // Register mediator handler
+  $mediator.registerRequestHandler(
+    (get) => IncrementCounterRequestHandler(counterState: get<CounterState>()),
   );
 
   // Initialize
-  await $.initializeAsync();
+  await SimpleArchitecture.initializeAsync();
 
   // Run
-  runApp(const App());
+  runApp(const _App());
+}
+
+final class _App extends StatelessWidget {
+  const _App();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: const _HomePage(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+    );
+  }
+}
+
+final class _HomePage extends StatelessWidget {
+  const _HomePage();
+
+  void _incrementCounter() {
+    $mediator.send(const IncrementCounterRequest());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = $states.get<CounterState>();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Simple Architecture State/Mediator example"),
+      ),
+      body: Center(
+        child: ValueListenableBuilder(
+          valueListenable: state,
+          builder: (context, state, child) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                "You have pushed the button this many times:",
+              ),
+              Text(
+                state.toString(),
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: "Increment",
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+/// Requests represents an action in the app...
+final class IncrementCounterRequest implements IRequest<void> {
+  const IncrementCounterRequest();
+}
+
+/// ...handled by a class specific for that message
+final class IncrementCounterRequestHandler
+    implements IRequestHandler<void, IncrementCounterRequest> {
+  const IncrementCounterRequestHandler({required CounterState counterState})
+      : _counterState = counterState;
+
+  final CounterState _counterState;
+
+  @override
+  Future<void> handle(IncrementCounterRequest request) async {
+    _counterState.increment();
+  }
+}
+
+/// A state holds a value available for the lifetime of the app
+final class CounterState extends BaseState<int> {
+  CounterState();
+
+  @override
+  Future<int> load() async {
+    // Not using state persistence, so we just create a default value
+    return 0;
+  }
+
+  @override
+  Future<void> save(int state) async {
+    // Not using state persistence
+  }
+
+  /// A good practice is to create a method to describe what means to change
+  /// this state.
+  void increment() {
+    change(value + 1);
+  }
 }
