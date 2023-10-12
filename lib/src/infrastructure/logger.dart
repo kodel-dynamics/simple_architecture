@@ -100,7 +100,7 @@ final class Logger<T> {
   }
 
   void debug(String Function() messageFactory) {
-    if (kDebugMode || logLevels.contains(LogLevel.debug) == false) {
+    if (kReleaseMode || logLevels.contains(LogLevel.debug) == false) {
       return;
     }
 

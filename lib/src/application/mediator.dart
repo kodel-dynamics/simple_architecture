@@ -51,13 +51,13 @@ final class Mediator {
       if (singletonFactory != null) {
         _logger.config("Instantiating singleton pipeline behavior #$priority");
 
-        final instance = singletonFactory($.services._get);
+        final instance = singletonFactory($services._get);
 
         _pipeline.add((() => instance, false));
       } else {
         final transientFactory = _transientPipelines[priority];
 
-        _pipeline.add((() => transientFactory!($.services._get), true));
+        _pipeline.add((() => transientFactory!($services._get), true));
       }
 
       _pipelineInitialized.add(false);
@@ -83,14 +83,14 @@ final class Mediator {
     if (registerAsTransient) {
       _logger.config("Registering ${IRequest<TResponse>} as transient");
 
-      $.services
+      $services
           .registerTransient<IRequestHandler<TResponse, IRequest<TResponse>>>(
         handlerFactory,
       );
     } else {
       _logger.config("Registering ${IRequest<TResponse>} as singleton");
 
-      $.services
+      $services
           .registerSingleton<IRequestHandler<TResponse, IRequest<TResponse>>>(
         handlerFactory,
       );
@@ -208,7 +208,7 @@ final class Mediator {
     _logger.debug(() => request.toString());
 
     final handler =
-        $.services.get<IRequestHandler<TResponse, IRequest<TResponse>>>();
+        $services.get<IRequestHandler<TResponse, IRequest<TResponse>>>();
 
     if (_pipeline.isEmpty) {
       return handler.handle(request);

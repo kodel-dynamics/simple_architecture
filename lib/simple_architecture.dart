@@ -3,33 +3,40 @@ library simple_architecture;
 import 'dart:developer' as Dev;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:rxdart/rxdart.dart';
 
+part 'src/application/base_state.dart';
 part 'src/application/i_notification.dart';
 part 'src/application/i_pipeline_behavior.dart';
 part 'src/application/i_request.dart';
 part 'src/application/mediator.dart';
+part 'src/application/states.dart';
 part 'src/exceptions/duplicated_element_exception.dart';
 part 'src/exceptions/element_not_found_exception.dart';
 part 'src/infrastructure/logger.dart';
-part 'src/presentation/mediator_notification_listener.dart';
 part 'src/services/i_bootable.dart';
 part 'src/services/i_initializable.dart';
 part 'src/services/services.dart';
 part 'src/settings/settings.dart';
 part 'src/shared/cancellation_token.dart';
 
-final class $ {
+const $initializeAsync = SimpleArchitecture.initializeAsync;
+final $settings = SimpleArchitecture.settings;
+final $services = SimpleArchitecture.services;
+final $mediator = SimpleArchitecture.mediator;
+final $states = SimpleArchitecture.states;
+
+final class SimpleArchitecture {
   // coverage:ignore-start
-  const $._();
+  const SimpleArchitecture._();
   // coverage:ignore-end
 
   static final settings = Settings._();
   static final services = Services._();
   static final mediator = Mediator._();
+  static final states = States._();
 
   @visibleForTesting
   static void purgeAll() {
@@ -54,12 +61,12 @@ final class $ {
       return;
     }
 
-    final logger = Logger<$>();
+    final logger = Logger<SimpleArchitecture>();
 
     logger.config("Initializing");
 
-    for (final entry in $.services._bootableFactories.entries) {
-      final instance = $.services._createSingletonInstance(
+    for (final entry in $services._bootableFactories.entries) {
+      final instance = $services._createSingletonInstance(
         entry.key,
         entry.value,
       ) as IBootable;
@@ -68,7 +75,7 @@ final class $ {
       await instance.initializeAsync();
     }
 
-    $.mediator._initialize();
+    $mediator._initialize();
     _isInitialized = true;
   }
 }

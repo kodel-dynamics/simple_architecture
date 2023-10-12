@@ -3,10 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:simple_architecture/simple_architecture.dart';
 
 void main() {
-  setUpAll($.purgeAll);
+  setUpAll(SimpleArchitecture.purgeAll);
 
   test("Settings should be added", () {
-    $.settings.add(
+    $settings.add(
       SampleSetting(
         string: "text",
         float: 3.14,
@@ -18,7 +18,7 @@ void main() {
   });
 
   test("Settings should be readable", () {
-    final sampleSetting = $.settings.get<SampleSetting>();
+    final sampleSetting = $settings.get<SampleSetting>();
 
     expect(sampleSetting.string, "text");
     expect(sampleSetting.float, 3.14);
@@ -28,7 +28,7 @@ void main() {
   });
 
   test("Settings should be replaceable", () {
-    $.settings.replace(SampleSetting(
+    $settings.replace(SampleSetting(
       boolean: false,
       dateTime: DateTime(2000),
       float: 0.1,
@@ -36,7 +36,7 @@ void main() {
       string: "",
     ));
 
-    final sampleSetting = $.settings.get<SampleSetting>();
+    final sampleSetting = $settings.get<SampleSetting>();
 
     expect(sampleSetting.string, "");
     expect(sampleSetting.float, 0.1);
@@ -47,7 +47,7 @@ void main() {
 
   test("Settings should not be overriden with add", () {
     expect(
-      () => $.settings.add(SampleSetting(
+      () => $settings.add(SampleSetting(
         boolean: false,
         dateTime: DateTime(2000),
         float: 0.1,
@@ -60,14 +60,14 @@ void main() {
 
   test("Settings should exist on get or throw exception", () {
     expect(
-      () => $.settings.get<NonRegisteredSetting>(),
+      () => $settings.get<NonRegisteredSetting>(),
       throwsA(const TypeMatcher<ElementNotFoundException>()),
     );
   });
 
   test("Settings should exist on replace or throw exception", () {
     expect(
-      () => $.settings.replace(const NonRegisteredSetting()),
+      () => $settings.replace(const NonRegisteredSetting()),
       throwsA(const TypeMatcher<ElementNotFoundException>()),
     );
   });

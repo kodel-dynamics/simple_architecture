@@ -91,7 +91,7 @@ final class Services {
     Map<Type, _FactoryDelegate> where,
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    if ($._isInitialized) {
+    if (SimpleArchitecture._isInitialized) {
       throw StateError(
         "You cannot register new abstract classes when Services is already "
         "initialized",
@@ -121,7 +121,7 @@ final class Services {
   /// * [ElementNotFoundException] if [TAbstract] wasn't registered.
   /// * [StateError] if [Services] isn't initialized.
   TAbstract get<TAbstract>() {
-    if ($._isInitialized == false) {
+    if (SimpleArchitecture._isInitialized == false) {
       throw StateError("You need to initialize Services before using get");
     }
 

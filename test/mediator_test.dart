@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:simple_architecture/simple_architecture.dart';
 
 void purgeAll() {
-  $.purgeAll();
+  SimpleArchitecture.purgeAll();
   TestRequestHandler.runCount = 0;
   InitializableTestRequestHandler.initializeCount = 0;
   InitializablePipelineBehavior.initializeCount = 0;
@@ -21,70 +21,70 @@ void main() {
   setUp(purgeAll);
 
   test("Mediators should work as transient", () async {
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: true,
     );
 
-    await $.initializeAsync();
+    await SimpleArchitecture.initializeAsync();
 
-    final response = await $.mediator.send(const TestRequest());
+    final response = await $mediator.send(const TestRequest());
 
     expect(response, true);
     expect(TestRequestHandler.runCount, 1);
 
-    final response2 = await $.mediator.send(const TestRequest());
+    final response2 = await $mediator.send(const TestRequest());
 
     expect(response2, true);
     expect(TestRequestHandler.runCount, 2);
   });
 
   test("Mediators should work as singleton", () async {
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: false,
     );
 
-    await $.initializeAsync();
+    await SimpleArchitecture.initializeAsync();
 
-    final response = await $.mediator.send(const TestRequest());
+    final response = await $mediator.send(const TestRequest());
 
     expect(response, true);
     expect(TestRequestHandler.runCount, 1);
 
-    final response2 = await $.mediator.send(const TestRequest());
+    final response2 = await $mediator.send(const TestRequest());
 
     expect(response2, false);
     expect(TestRequestHandler.runCount, 2);
   });
 
   test("Pipeline behaviors as transient", () async {
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: true,
     );
 
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: true,
     );
 
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       20,
       (get) => Priority20PipelineBehavior(),
       registerAsTransient: true,
     );
 
-    await $.initializeAsync();
+    await SimpleArchitecture.initializeAsync();
 
-    await $.mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 1);
     expect(Priority20PipelineBehavior.runCount, 1);
     expect(pipelineBehaviorPriorityOrder, [10, 20]);
 
-    await $.mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 2);
     expect(Priority20PipelineBehavior.runCount, 2);
@@ -92,32 +92,32 @@ void main() {
   });
 
   test("Pipeline behaviors as singleton", () async {
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
       registerAsTransient: false,
     );
 
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: false,
     );
 
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       20,
       (get) => Priority20PipelineBehavior(),
       registerAsTransient: false,
     );
 
-    await $.initializeAsync();
+    await SimpleArchitecture.initializeAsync();
 
-    await $.mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 1);
     expect(Priority20PipelineBehavior.runCount, 1);
     expect(pipelineBehaviorPriorityOrder, [10, 20]);
 
-    await $.mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(Priority10PipelineBehavior.runCount, 2);
     expect(Priority20PipelineBehavior.runCount, 2);
@@ -125,14 +125,14 @@ void main() {
   });
 
   test("Pipeline behaviors duplication as transient should thow", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: true,
     );
 
     expect(
-      () => $.mediator.registerPipelineBehavior(
+      () => $mediator.registerPipelineBehavior(
         10,
         (get) => Priority20PipelineBehavior(),
         registerAsTransient: true,
@@ -142,14 +142,14 @@ void main() {
   });
 
   test("Pipeline behaviors duplication t/s should throw", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: true,
     );
 
     expect(
-      () => $.mediator.registerPipelineBehavior(
+      () => $mediator.registerPipelineBehavior(
         10,
         (get) => Priority20PipelineBehavior(),
         registerAsTransient: false,
@@ -159,14 +159,14 @@ void main() {
   });
 
   test("Pipeline behaviors duplication t/t should throw", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: true,
     );
 
     expect(
-      () => $.mediator.registerPipelineBehavior(
+      () => $mediator.registerPipelineBehavior(
         10,
         (get) => Priority20PipelineBehavior(),
         registerAsTransient: true,
@@ -176,14 +176,14 @@ void main() {
   });
 
   test("Pipeline behaviors duplication s/t should throw", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: false,
     );
 
     expect(
-      () => $.mediator.registerPipelineBehavior(
+      () => $mediator.registerPipelineBehavior(
         10,
         (get) => Priority20PipelineBehavior(),
         registerAsTransient: true,
@@ -193,14 +193,14 @@ void main() {
   });
 
   test("Pipeline behaviors duplication s/s should throw", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: false,
     );
 
     expect(
-      () => $.mediator.registerPipelineBehavior(
+      () => $mediator.registerPipelineBehavior(
         10,
         (get) => Priority20PipelineBehavior(),
         registerAsTransient: false,
@@ -210,50 +210,50 @@ void main() {
   });
 
   test("Pipeline should short-circuit", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => CancelledPipelineBehavior(),
       registerAsTransient: false,
     );
 
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       20,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: false,
     );
 
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
     );
 
-    await $.initializeAsync();
+    await SimpleArchitecture.initializeAsync();
 
-    await $.mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(CancelledPipelineBehavior.runCount, 1);
     expect(Priority10PipelineBehavior.runCount, 0);
   });
 
   test("Pipeline should short-circuit with error", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => CancelledWithErrorPipelineBehavior(),
       registerAsTransient: false,
     );
 
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       20,
       (get) => Priority10PipelineBehavior(),
       registerAsTransient: false,
     );
 
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => TestRequestHandler(),
     );
 
-    await $.initializeAsync();
+    await SimpleArchitecture.initializeAsync();
 
-    await $.mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(CancelledWithErrorPipelineBehavior.runCount, 1);
     expect(Priority10PipelineBehavior.runCount, 0);
@@ -263,7 +263,7 @@ void main() {
     final lock1 = Completer<void>();
     final lock2 = Completer<void>();
 
-    final subscription = $.mediator.listenTo<TestNotification>().listen(
+    final subscription = $mediator.listenTo<TestNotification>().listen(
           expectAsync1(
             (notification) {
               expect(
@@ -281,8 +281,8 @@ void main() {
           ),
         );
 
-    $.mediator.publish(const TestNotification(value: 1));
-    $.mediator.publish(const TestNotification(value: 2));
+    $mediator.publish(const TestNotification(value: 1));
+    $mediator.publish(const TestNotification(value: 2));
 
     await Future.wait([lock1.future, lock2.future])
         .timeout(const Duration(milliseconds: 500));
@@ -291,11 +291,11 @@ void main() {
   });
 
   test("Notifications should work with seed", () async {
-    $.mediator.publish(const TestNotification(value: 1));
+    $mediator.publish(const TestNotification(value: 1));
 
     final lock = Completer<void>();
 
-    final subscription = $.mediator.listenTo<TestNotification>().listen(
+    final subscription = $mediator.listenTo<TestNotification>().listen(
           expectAsync1(
             (notification) {
               expect(notification.value, 1);
@@ -311,65 +311,65 @@ void main() {
   });
 
   test("Transient IInitializable pipeline should work", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => InitializablePipelineBehavior(),
       registerAsTransient: true,
     );
 
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => InitializableTestRequestHandler(),
       registerAsTransient: true,
     );
 
-    await $.initializeAsync();
-    await $.mediator.send(const TestRequest());
-    await $.mediator.send(const TestRequest());
+    await SimpleArchitecture.initializeAsync();
+    await $mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(InitializablePipelineBehavior.initializeCount, 2);
   });
 
   test("Singleton IInitializable pipeline should work", () async {
-    $.mediator.registerPipelineBehavior(
+    $mediator.registerPipelineBehavior(
       10,
       (get) => InitializablePipelineBehavior(),
       registerAsTransient: false,
     );
 
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => InitializableTestRequestHandler(),
       registerAsTransient: true,
     );
 
-    await $.initializeAsync();
-    await $.mediator.send(const TestRequest());
-    await $.mediator.send(const TestRequest());
+    await SimpleArchitecture.initializeAsync();
+    await $mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(InitializablePipelineBehavior.initializeCount, 1);
   });
 
   test("Transient IInitializable handler should work", () async {
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => InitializableTestRequestHandler(),
       registerAsTransient: true,
     );
 
-    await $.initializeAsync();
-    await $.mediator.send(const TestRequest());
-    await $.mediator.send(const TestRequest());
+    await SimpleArchitecture.initializeAsync();
+    await $mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(InitializableTestRequestHandler.initializeCount, 2);
   });
 
   test("Singleton IInitializable handler should work", () async {
-    $.mediator.registerRequestHandler(
+    $mediator.registerRequestHandler(
       (get) => InitializableTestRequestHandler(),
       registerAsTransient: false,
     );
 
-    await $.initializeAsync();
-    await $.mediator.send(const TestRequest());
-    await $.mediator.send(const TestRequest());
+    await SimpleArchitecture.initializeAsync();
+    await $mediator.send(const TestRequest());
+    await $mediator.send(const TestRequest());
 
     expect(InitializableTestRequestHandler.initializeCount, 1);
   });
