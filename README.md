@@ -1,14 +1,6 @@
 Pub Package: https://pub.dev/packages/simple_architecture
 
-The Simple Architecture package provides three pillars to build apps upon:
-
-# Features
-- ☑ Settings
-- ☑ Services (service locator & dependency injection)
-- ☑ Mediator pattern
-- ☐ Flutter UI utilities
-- ☐ Null Safe & Exception Safe results
-- ☐ Example project
+The Simple Architecture package provides four features to build apps upon:
 
 # Settings
 
@@ -17,6 +9,24 @@ Settings are classes containing your application settings, such as `googleClient
 Such settings are injected into the dependency injector and are updatable (can be used, for example, in conjunction with Firebase Remote Config).
 
 Settings as classes are useful when you want to reuse your services (ex.: authentication service) among many different apps (each app will have different settings, such as `googleClientId`, `appleRedirectUri`, etc.). Separating the (variable) setting from the (fixed) services implementation eases up the reusability of those services.
+
+You can register settings as this:
+
+```dart
+$settings.add(
+    SampleSetting(
+      string: "text",
+      float: 3.14,
+      integer: 42,
+      boolean: true,
+      dateTime: DateTime(2023, 10, 6, 21, 36),
+    ),
+  );
+```
+
+You can get the current setting value either by injecting it in some other constructor (ex.: `$services.registerTransient<IType>((get) => CType(get<SomeSetting>())))`) or using `$settings.get<SomeSettng>()`.
+
+Settings are updatable with `$settings.replace<T>(T newValue)` (the `T` setting can (and should) be immutable, only the registration of the setting is replaceable).
 
 # Services
 
@@ -40,6 +50,24 @@ Check more details about those patterns:
 * DTO: https://martinfowler.com/eaaCatalog/dataTransferObject.html
 * Plugin: https://martinfowler.com/eaaCatalog/plugin.html
 * Transaction Script: https://martinfowler.com/eaaCatalog/transactionScript.html?ref=jimmybogard.com
+
+You can register services in the `$services` shortcut (usually the first thing you do in your `main`).
+
+```dart
+Future<void> main() async {
+  /// Register a CType as an instance of IType that receives an instance of an IOtherType
+  /// Registration doesn't need to be in order
+  $settings.registerSingleton<IType>(
+    (get) = CType(get <IOtherType>()),
+  );
+
+  $settings.registerTransient<IOtherType>(
+    (get) => COtherType(),
+  )
+}
+```
+
+You can get an instance of some service by calling `$services.get<IType>()`.
 
 # Mediator Pattern
 

@@ -12,3 +12,7 @@
 
 ## 0.231010.2
 * Fix missing markdown features on pub.dev
+
+## 1.231012.1
+* States implemented
+* Initial non-debug release
