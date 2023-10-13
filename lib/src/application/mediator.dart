@@ -1,3 +1,5 @@
+// ignore_for_file: close_sinks
+
 part of '../../simple_architecture.dart';
 
 /// The [Mediator] allows registration of message handlers, so you can implement
