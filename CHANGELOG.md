@@ -28,3 +28,6 @@
 
 ## 1.231012.5
 * Initializing mediator before finishing booting `IBootable` instances
+
+## 1.231012.6
+* Fix for nullable states

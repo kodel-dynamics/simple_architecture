@@ -30,6 +30,17 @@ void main() {
     expect(state.value, 1);
   });
 
+  test("Nullable states should work", () async {
+    $states.registerState((get) => NullableTestState());
+    await $initializeAsync();
+
+    final state = $states.get<NullableTestState>();
+
+    expect(state.value, null);
+    state.change(1);
+    expect(state.value, 1);
+  });
+
   test("States should notify", () async {
     $states.registerState((get) => TestState());
     await $initializeAsync();
@@ -80,4 +91,14 @@ final class TestState extends BaseState<int> {
   Future<void> save(int state) async {
     _persistedValue = state;
   }
+}
+
+final class NullableTestState extends BaseState<int?> {
+  @override
+  Future<int?> load() async {
+    return null;
+  }
+
+  @override
+  Future<void> save(int? state) async {}
 }

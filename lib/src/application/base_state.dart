@@ -23,7 +23,7 @@ abstract base class BaseState<TValue> extends ChangeNotifier
 
   /// Gets the current value of this state.
   @override
-  TValue get value => _value!;
+  TValue get value => _value as TValue;
 
   /// Initializes this state by loading its initial value.
   ///
