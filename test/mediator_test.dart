@@ -263,7 +263,7 @@ void main() {
     final lock1 = Completer<void>();
     final lock2 = Completer<void>();
 
-    final subscription = $mediator.listenTo<TestNotification>().listen(
+    final subscription = $mediator.getChannel<TestNotification>().listen(
           expectAsync1(
             (notification) {
               expect(
@@ -295,7 +295,7 @@ void main() {
 
     final lock = Completer<void>();
 
-    final subscription = $mediator.listenTo<TestNotification>().listen(
+    final subscription = $mediator.getChannel<TestNotification>().listen(
           expectAsync1(
             (notification) {
               expect(notification.value, 1);
@@ -308,6 +308,22 @@ void main() {
     await lock.future;
 
     await subscription.cancel();
+  });
+
+  test("Sync notifications listener should work", () async {
+    final completer = Completer<int>();
+
+    await $mediator.listenTo<TestNotification>(
+      (notification) async => completer.complete(notification.value),
+      () async {
+        expect(completer.isCompleted, false);
+        $mediator.publish(const TestNotification(value: 10));
+
+        final value = await completer.future;
+
+        expect(value, 10);
+      },
+    );
   });
 
   test("Transient IInitializable pipeline should work", () async {

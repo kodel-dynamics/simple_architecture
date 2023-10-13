@@ -31,3 +31,6 @@
 
 ## 1.231012.6
 * Fix for nullable states
+
+## 1.231012.7
+* Short lived notification listeners

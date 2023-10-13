@@ -147,9 +147,9 @@ final class Mediator {
     }
   }
 
-  /// Listens to any notification delivered to this mediator of type
-  /// [INotification].
-  Stream<TNotification> listenTo<TNotification extends INotification>() {
+  /// Creates or fetch a stream to listen to notifications of type
+  /// [TNotification].
+  Stream<TNotification> getChannel<TNotification extends INotification>() {
     _logger.debug(() => "Listening to $TNotification");
 
     final stream = _streams[TNotification];
@@ -161,6 +161,25 @@ final class Mediator {
     }
 
     return stream as Stream<TNotification>;
+  }
+
+  /// Listens to the stream of [TNotification] notifications while the closure
+  /// is active, then drops the channel
+  Future<void> listenTo<TNotification extends INotification>(
+    Future<void> Function(TNotification notification) handler,
+    Future<void> Function() closure,
+  ) async {
+    StreamSubscription<TNotification>? subscription;
+
+    try {
+      final subject = _getBehaviorSubject<TNotification>();
+      final stream = subject.stream;
+
+      subscription = stream.listen(handler);
+      await closure();
+    } finally {
+      await subscription?.cancel();
+    }
   }
 
   BehaviorSubject<TNotification>
