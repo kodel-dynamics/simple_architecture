@@ -80,7 +80,7 @@ final class Services {
   /// either as a singleton or transient.
   /// * [StateError] in case [Services] is already initialized (you can only
   /// register types before that)
-  void registerBootableSingleton<TAbstract extends IBootable>(
+  void registerBootableSingleton<TAbstract>(
     TAbstract Function(GetDelegate get) delegate,
   ) {
     _logger.config("Registering $TAbstract bootable singleton");

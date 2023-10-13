@@ -22,3 +22,6 @@
 
 ## 1.231012.3
 * Lint issues
+
+## 1.231012.4
+* Abstract interfaces for `registerBootableSingleton` no longer required to inherit `IBootable` (but the concrete class must)
