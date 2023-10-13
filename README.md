@@ -1,5 +1,7 @@
 Pub Package: https://pub.dev/packages/simple_architecture
 
+Documentation: https://pub.dev/documentation/simple_architecture/latest/simple_architecture/simple_architecture-library.html
+
 The Simple Architecture package provides four features to build apps upon:
 
 # Settings

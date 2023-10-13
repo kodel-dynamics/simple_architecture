@@ -16,3 +16,6 @@
 ## 1.231012.1
 * States implemented
 * Initial non-debug release
+
+## 1.231012.2
+* Docs link
