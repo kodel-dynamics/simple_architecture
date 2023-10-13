@@ -165,9 +165,9 @@ final class Mediator {
 
   /// Listens to the stream of [TNotification] notifications while the closure
   /// is active, then drops the channel
-  Future<void> listenTo<TNotification extends INotification>(
+  Future<T> listenTo<TNotification extends INotification, T>(
     Future<void> Function(TNotification notification) handler,
-    Future<void> Function() closure,
+    Future<T> Function() closure,
   ) async {
     StreamSubscription<TNotification>? subscription;
 
@@ -176,7 +176,7 @@ final class Mediator {
       final stream = subject.stream;
 
       subscription = stream.listen(handler);
-      await closure();
+      return await closure();
     } finally {
       await subscription?.cancel();
     }

@@ -313,7 +313,7 @@ void main() {
   test("Sync notifications listener should work", () async {
     final completer = Completer<int>();
 
-    await $mediator.listenTo<TestNotification>(
+    await $mediator.listenTo<TestNotification, void>(
       (notification) async => completer.complete(notification.value),
       () async {
         expect(completer.isCompleted, false);

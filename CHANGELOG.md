@@ -34,3 +34,9 @@
 
 ## 1.231012.7
 * Short lived notification listeners
+
+## 1.231012.8
+* Short lived notification listeners with return values
+
+## 1.231012.9
+* Less verbosity on services log

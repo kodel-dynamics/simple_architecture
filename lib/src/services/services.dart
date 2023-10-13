@@ -158,7 +158,7 @@ final class Services {
     _FactoryDelegate factory,
     bool isTransient,
   ) {
-    _logger.info("Instantiating $abstractType");
+    _logger.debug(() => "Instantiating $abstractType");
 
     final instance = factory(_get);
     final abstractTypeName = "$abstractType";
@@ -170,12 +170,13 @@ final class Services {
 
     final registryType = isTransient ? "transient" : "singleton";
 
-    _logger.info(
-      "${instance.runtimeType} instantiated as $abstractType $registryType",
+    _logger.debug(
+      () => "${instance.runtimeType} instantiated as "
+          "$abstractType $registryType",
     );
 
     if (instance is IInitializable) {
-      _logger.info("Initializing $registryType $typeName");
+      _logger.debug(() => "Initializing $registryType $typeName");
       instance.initialize();
     }
 
