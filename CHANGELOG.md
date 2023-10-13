@@ -25,3 +25,6 @@
 
 ## 1.231012.4
 * Abstract interfaces for `registerBootableSingleton` no longer required to inherit `IBootable` (but the concrete class must)
+
+## 1.231012.5
+* Initializing mediator before finishing booting `IBootable` instances

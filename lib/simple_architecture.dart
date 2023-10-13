@@ -65,6 +65,8 @@ final class SimpleArchitecture {
 
     logger.config("Initializing");
 
+    $mediator._initialize();
+
     for (final entry in $services._bootableFactories.entries) {
       final instance = $services._createSingletonInstance(
         entry.key,
@@ -75,7 +77,6 @@ final class SimpleArchitecture {
       await instance.initializeAsync();
     }
 
-    $mediator._initialize();
     _isInitialized = true;
   }
 }
