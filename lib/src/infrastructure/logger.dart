@@ -39,7 +39,7 @@ enum LogLevel {
 }
 
 final class Logger<T> {
-  Logger();
+  const Logger();
 
   static final logLevels = kDebugMode
       ? LogLevel.values
@@ -49,12 +49,12 @@ final class Logger<T> {
           LogLevel.info,
         ];
 
-  final _surfaceBrightness = HSLColor.fromColor(
+  static final _surfaceBrightness = HSLColor.fromColor(
         const Color(0xFF2a2d2e),
       ).lightness *
       3.33;
 
-  final _titles = <String, String>{};
+  static final _titles = <String, String>{};
 
   void error(String message, [Object? exception, StackTrace? stackTrace]) {
     if (logLevels.contains(LogLevel.error) == false) {

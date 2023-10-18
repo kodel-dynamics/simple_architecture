@@ -40,3 +40,7 @@
 
 ## 1.231012.9
 * Less verbosity on services log
+
+## 1.231016.1
+* Const Logger, so more classes can be registered as const as well
+* Better documentation (I hope)
