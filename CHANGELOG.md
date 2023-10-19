@@ -50,3 +50,6 @@
 
 ## 1.231019.2
 * Added some extension methods to publish `INotification` and `IRequest<TResponse>`
+
+## 1.231019.3
+* Fix logging for `INotification.publish()`

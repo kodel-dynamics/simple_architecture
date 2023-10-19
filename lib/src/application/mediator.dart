@@ -202,7 +202,7 @@ final class Mediator {
   void publish<TNotification extends INotification>(
     TNotification notification,
   ) {
-    _logger.info("Publishing $TNotification");
+    _logger.info("Publishing ${notification.runtimeType}");
     _logger.debug(() => notification.toString());
 
     final bs = _getBehaviorSubject<TNotification>(notification);
