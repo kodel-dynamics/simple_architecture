@@ -46,4 +46,7 @@
 * Better documentation (I hope)
 
 ## 1.231019.1
-* Add `Response<TValue, TFailure extends Enum>` as an union class for mediator responses that can be either success (where value = TValue) or failure (where failure is an Enum)
+* Added `Response<TValue, TFailure extends Enum>` as an union class for mediator responses that can be either success (where value = TValue) or failure (where failure is an Enum)
+
+## 1.231019.2
+* Added some extension methods to publish `INotification` and `IRequest<TResponse>`

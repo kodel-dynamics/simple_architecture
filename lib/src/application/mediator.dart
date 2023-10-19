@@ -276,3 +276,17 @@ final class Mediator {
     return runner(0);
   }
 }
+
+// coverage:ignore-start
+extension INotificationExtensions on INotification {
+  void publish() {
+    $mediator.publish(this);
+  }
+}
+
+extension IRequestExtension<TResponse> on IRequest<TResponse> {
+  Future<TResponse> send() {
+    return $mediator.send(this);
+  }
+}
+// coverage:ignore-end
