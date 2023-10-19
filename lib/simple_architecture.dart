@@ -68,6 +68,9 @@ final class SimpleArchitecture {
     logger.config("Initializing");
 
     $mediator._initialize();
+    _isInitialized = true;
+
+    final bootables = <IBootable>[];
 
     for (final entry in $services._bootableFactories.entries) {
       final instance = $services._createSingletonInstance(
@@ -75,10 +78,12 @@ final class SimpleArchitecture {
         entry.value,
       ) as IBootable;
 
-      logger.config("Booting ${entry.key}");
-      await instance.initializeAsync();
+      bootables.add(instance);
     }
 
-    _isInitialized = true;
+    for (final bootable in bootables) {
+      logger.config("Booting ${bootable.runtimeType}");
+      await bootable.initializeAsync();
+    }
   }
 }

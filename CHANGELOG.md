@@ -11,7 +11,7 @@
 * Mediator pattern implemented
 
 ## 0.231010.2
-* Fix missing markdown features on pub.dev
+* Fixed missing markdown features on pub.dev
 
 ## 1.231012.1
 * States implemented
@@ -30,7 +30,7 @@
 * Initializing mediator before finishing booting `IBootable` instances
 
 ## 1.231012.6
-* Fix for nullable states
+* Fixed for nullable states
 
 ## 1.231012.7
 * Short lived notification listeners
@@ -52,4 +52,7 @@
 * Added some extension methods to publish `INotification` and `IRequest<TResponse>`
 
 ## 1.231019.3
-* Fix logging for `INotification.publish()`
+* Fixed logging for `INotification.publish()`
+
+## 1.231019.4
+* Fixed initialization order
