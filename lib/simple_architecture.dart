@@ -1,7 +1,6 @@
 library simple_architecture;
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer' as Dev;
 
 import 'package:flutter/foundation.dart';
