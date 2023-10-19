@@ -66,7 +66,7 @@ The S.O.L.I.D. principles They are very common in projects written by more senio
 
 *Don't Repeat Yourself* is a principle that says that you should not repeat a single line of code to implement more than one functionality. This requirement is met with *pipeline behaviors* to implement features used at multiple points once (as opposed to, for example, adding error handling to each of the *features* separately). What if one is forgotten? What if you want to add functionality like reporting an error to Firebase Crashlytics? If more than one point in the code must be changed to accomplish this objective, then the code is not D.R.Y.
 
-### Exceptions like flow control
+### Exceptions as flow control
 
 Exceptions are almost always used as flow control, rather than representing an error from which we cannot recover. For example, the `sign_in_with_apple` package generates an exception of type `SignInWithAppleAuthorizationException` with the code `AuthorizationErrorCode.canceled` when the user cancels the authentication flow. This is not a good thing as this is not a mistake. The program flow is interrupted and transferred to a `catch` clause or, worse, if no `catch` is in the context, the application simply stops working, just because the user gave up signing in with an Apple account!
 
