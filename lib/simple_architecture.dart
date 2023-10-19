@@ -1,6 +1,7 @@
 library simple_architecture;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as Dev;
 
 import 'package:flutter/foundation.dart';
@@ -22,6 +23,7 @@ part 'src/services/i_initializable.dart';
 part 'src/services/services.dart';
 part 'src/settings/settings.dart';
 part 'src/shared/cancellation_token.dart';
+part 'src/shared/response.dart';
 
 const $initializeAsync = SimpleArchitecture.initializeAsync;
 final $settings = SimpleArchitecture.settings;
@@ -62,7 +64,7 @@ final class SimpleArchitecture {
       return;
     }
 
-    final logger = Logger<SimpleArchitecture>();
+    const logger = Logger<SimpleArchitecture>();
 
     logger.config("Initializing");
 

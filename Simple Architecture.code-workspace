@@ -45,6 +45,18 @@
       "editor.rulers": [
         80
       ]
-    }
+    },
+    "dotnet.defaultSolution": "disable",
+    "flutter-coverage.coverageFileNames": [
+      "lcov.info",
+      "cov.xml",
+      "coverage.xml",
+      "jacoco.xml"
+    ],
+    "flutter-coverage.coverageFilePaths": [
+      "coverage"
+    ],
+    "flutter-coverage.lowCoverageThreshold": 50,
+    "flutter-coverage.sufficientCoverageThreshold": 70
   }
 }

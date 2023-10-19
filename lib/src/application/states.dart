@@ -6,7 +6,7 @@ part of '../../simple_architecture.dart';
 final class States {
   States._();
 
-  final _logger = Logger<States>();
+  final _logger = const Logger<States>();
 
   /// Register a state manager as a bootable singleton.
   ///

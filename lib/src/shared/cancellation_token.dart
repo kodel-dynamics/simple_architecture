@@ -8,7 +8,7 @@ final class CancellationToken {
   bool _isCancelled = false;
   bool get isCancelled => _isCancelled;
 
-  final _logger = Logger<CancellationToken>();
+  final _logger = const Logger<CancellationToken>();
 
   void cancel({String? message, Object? exception, StackTrace? stackTrace}) {
     if (message == null) {

@@ -13,7 +13,7 @@ final class Settings {
   Settings._();
 
   final _settings = <Type, dynamic>{};
-  final _logger = Logger<Settings>();
+  final _logger = const Logger<Settings>();
 
   void _purgeAll() {
     _settings.clear();

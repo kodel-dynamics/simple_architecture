@@ -44,3 +44,6 @@
 ## 1.231016.1
 * Const Logger, so more classes can be registered as const as well
 * Better documentation (I hope)
+
+## 1.231019.1
+* Add `Response<TValue, TFailure extends Enum>` as an union class for mediator responses that can be either success (where value = TValue) or failure (where failure is an Enum)

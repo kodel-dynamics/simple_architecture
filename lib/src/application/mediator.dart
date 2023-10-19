@@ -23,7 +23,7 @@ final class Mediator {
   final _pipelineInitialized = <bool>[];
   final _behaviorSubjects = <Type, BehaviorSubject<dynamic>>{};
   final _streams = <Type, Stream<dynamic>>{};
-  final _logger = Logger<Mediator>();
+  final _logger = const Logger<Mediator>();
 
   void _purgeAll() {
     _transientPipelines.clear();

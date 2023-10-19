@@ -19,7 +19,7 @@ final class Services {
   final _singletonFactories = <Type, _FactoryDelegate>{};
   final _bootableFactories = <Type, _FactoryDelegate>{};
   final _singletonInstances = <Type, dynamic>{};
-  final _logger = Logger<Services>();
+  final _logger = const Logger<Services>();
 
   void _purgeAll() {
     _transientFactories.clear();
