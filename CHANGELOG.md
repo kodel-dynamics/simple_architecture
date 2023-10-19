@@ -56,3 +56,6 @@
 
 ## 1.231019.4
 * Fixed initialization order
+
+## 1.231019.5
+* Fixed states not being emitted on load

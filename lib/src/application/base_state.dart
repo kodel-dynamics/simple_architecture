@@ -33,6 +33,8 @@ abstract base class BaseState<TValue> extends ChangeNotifier
   Future<void> initializeAsync() async {
     _logger.config("Initializing");
     _value = await load();
+    _logger.debug(() => "$_value");
+    notifyListeners();
   }
 
   /// Loads the initial value of this state (either by creating a new default
