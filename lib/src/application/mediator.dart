@@ -21,8 +21,8 @@ final class Mediator {
       <(IPipelineBehavior Function() factory, bool isTransient)>[];
 
   final _pipelineInitialized = <bool>[];
-  final _behaviorSubjects = <Type, BehaviorSubject<dynamic>>{};
-  final _streams = <Type, Stream<dynamic>>{};
+  final _behaviorSubjects = <String, BehaviorSubject<dynamic>>{};
+  final _streams = <String, Stream<dynamic>>{};
 
   void _purgeAll() {
     _transientPipelines.clear();
@@ -149,14 +149,16 @@ final class Mediator {
   /// Creates or fetch a stream to listen to notifications of type
   /// [TNotification].
   Stream<TNotification> getChannel<TNotification extends INotification>() {
-    logger.debug(() => "Listening to $TNotification");
+    final channelName = "$TNotification";
 
-    final stream = _streams[TNotification];
+    logger.debug(() => "Listening to $channelName");
+
+    final stream = _streams[channelName];
 
     if (stream == null) {
-      final subject = _getBehaviorSubject<TNotification>();
+      final subject = _getBehaviorSubject<TNotification>(channelName);
 
-      return _streams[TNotification] = subject.stream;
+      return _streams[channelName] = subject.stream;
     }
 
     return stream as Stream<TNotification>;
@@ -168,10 +170,11 @@ final class Mediator {
     Future<void> Function(TNotification notification) handler,
     Future<T> Function() closure,
   ) async {
+    final channelName = "$TNotification";
     StreamSubscription<TNotification>? subscription;
 
     try {
-      final subject = _getBehaviorSubject<TNotification>();
+      final subject = _getBehaviorSubject<TNotification>(channelName);
       final stream = subject.stream;
 
       subscription = stream.listen(handler);
@@ -182,13 +185,14 @@ final class Mediator {
   }
 
   BehaviorSubject<TNotification>
-      _getBehaviorSubject<TNotification extends INotification>([
+      _getBehaviorSubject<TNotification extends INotification>(
+    String channelName, [
     TNotification? seed,
   ]) {
-    final subject = _behaviorSubjects[TNotification];
+    final subject = _behaviorSubjects[channelName];
 
     if (subject == null) {
-      return _behaviorSubjects[TNotification] = seed == null
+      return _behaviorSubjects[channelName] = seed == null
           ? BehaviorSubject<TNotification>()
           : BehaviorSubject<TNotification>.seeded(seed);
     }
@@ -201,10 +205,12 @@ final class Mediator {
   void publish<TNotification extends INotification>(
     TNotification notification,
   ) {
-    logger.info("Publishing ${notification.runtimeType}");
+    final channelName = "${notification.runtimeType}";
+
+    logger.info("Publishing $channelName");
     logger.debug(() => notification.toString());
 
-    final bs = _getBehaviorSubject<TNotification>(notification);
+    final bs = _getBehaviorSubject<TNotification>(channelName, notification);
 
     if (bs.valueOrNull == notification) {
       return;

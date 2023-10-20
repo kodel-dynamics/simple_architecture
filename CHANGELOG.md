@@ -65,3 +65,6 @@
 
 ## 1.231020.2
 * Removed `fromFailure` from `Response` and added `from` as a factory of `Failure`
+
+## 1.231020.3
+* Fixed $mediator notification mixed channel bug
