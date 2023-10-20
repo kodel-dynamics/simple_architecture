@@ -310,6 +310,75 @@ void main() {
     await subscription.cancel();
   });
 
+  test("Notifications should work separately (before)", () async {
+    $mediator.publish(const TestNotification(value: 1));
+    $mediator.publish(const TestOtherNotification(value: 2));
+
+    final lock = Completer<void>();
+
+    final subscription = $mediator.getChannel<TestNotification>().listen(
+          expectAsync1(
+            (notification) {
+              expect(notification.value, 1);
+              lock.complete();
+            },
+            count: 1,
+          ),
+        );
+
+    await lock.future;
+    await subscription.cancel();
+
+    final lock2 = Completer<void>();
+
+    final subscription2 = $mediator.getChannel<TestOtherNotification>().listen(
+          expectAsync1(
+            (notification) {
+              expect(notification.value, 2);
+              lock2.complete();
+            },
+            count: 1,
+          ),
+        );
+
+    await lock2.future;
+    await subscription2.cancel();
+  });
+
+  test("Notifications should work separately (after)", () async {
+    final lock = Completer<void>();
+
+    final subscription = $mediator.getChannel<TestNotification>().listen(
+          expectAsync1(
+            (notification) {
+              expect(notification.value, 1);
+              lock.complete();
+            },
+            count: 1,
+          ),
+        );
+
+    final lock2 = Completer<void>();
+
+    final subscription2 = $mediator.getChannel<TestOtherNotification>().listen(
+          expectAsync1(
+            (notification) {
+              expect(notification.value, 2);
+              lock2.complete();
+            },
+            count: 1,
+          ),
+        );
+
+    $mediator.publish(const TestNotification(value: 1));
+    $mediator.publish(const TestOtherNotification(value: 2));
+
+    await lock.future;
+    await lock2.future;
+    await subscription.cancel();
+    await subscription2.cancel();
+  });
+
   test("Sync notifications listener should work", () async {
     final completer = Completer<int>();
 
@@ -512,6 +581,17 @@ final class TestNotification implements INotification {
   @override
   String toString() {
     return "TestNotification($value)";
+  }
+}
+
+final class TestOtherNotification implements INotification {
+  const TestOtherNotification({required this.value});
+
+  final int value;
+
+  @override
+  String toString() {
+    return "TestOtherNotification($value)";
   }
 }
 
