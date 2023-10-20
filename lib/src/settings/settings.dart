@@ -13,7 +13,6 @@ final class Settings {
   Settings._();
 
   final _settings = <Type, dynamic>{};
-  final _logger = const Logger<Settings>();
 
   void _purgeAll() {
     _settings.clear();
@@ -33,8 +32,8 @@ final class Settings {
 
     _settings[T] = setting;
     $services._replaceSingletonInstance(setting);
-    _logger.config("Setting $T registered");
-    _logger.debug(() => setting.toString());
+    logger.config("Setting $T registered");
+    logger.debug(() => setting.toString());
   }
 
   /// Gets a registered setting of type [T].
@@ -67,7 +66,7 @@ final class Settings {
 
     _settings[T] = setting;
     $services._replaceSingletonInstance(setting);
-    _logger.config("Setting $T replaced");
-    _logger.debug(() => setting.toString());
+    logger.config("Setting $T replaced");
+    logger.debug(() => setting.toString());
   }
 }

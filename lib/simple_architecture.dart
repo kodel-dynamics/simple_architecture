@@ -63,10 +63,9 @@ final class SimpleArchitecture {
       return;
     }
 
-    const logger = Logger<SimpleArchitecture>();
+    const logger = Logger._(SimpleArchitecture);
 
     logger.config("Initializing");
-
     $mediator._initialize();
     _isInitialized = true;
 

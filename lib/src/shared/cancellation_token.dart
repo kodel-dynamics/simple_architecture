@@ -8,8 +8,6 @@ final class CancellationToken {
   bool _isCancelled = false;
   bool get isCancelled => _isCancelled;
 
-  final _logger = const Logger<CancellationToken>();
-
   void cancel({String? message, Object? exception, StackTrace? stackTrace}) {
     if (message == null) {
       message = "$operationName is being cancelled";
@@ -18,9 +16,9 @@ final class CancellationToken {
     }
 
     if (exception == null) {
-      _logger.warning(message);
+      logger.warning(message);
     } else {
-      _logger.error(message, exception, stackTrace);
+      logger.error(message, exception, stackTrace);
     }
 
     _isCancelled = true;

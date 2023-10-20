@@ -17,8 +17,6 @@ abstract base class BaseState<TValue> extends ChangeNotifier
     implements ValueListenable<TValue>, IBootable, IState {
   BaseState();
 
-  final _logger = Logger<BaseState<TValue>>();
-
   TValue? _value;
 
   /// Gets the current value of this state.
@@ -31,9 +29,9 @@ abstract base class BaseState<TValue> extends ChangeNotifier
   @override
   @mustCallSuper
   Future<void> initializeAsync() async {
-    _logger.config("Initializing");
+    logger.config("Initializing");
     _value = await load();
-    _logger.debug(() => "$_value");
+    logger.debug(() => "$_value");
     notifyListeners();
   }
 
@@ -53,8 +51,8 @@ abstract base class BaseState<TValue> extends ChangeNotifier
       return;
     }
 
-    _logger.info("State is changing");
-    _logger.debug(() => toString());
+    logger.info("State is changing");
+    logger.debug(() => toString());
 
     _value = newState;
     save(newState);

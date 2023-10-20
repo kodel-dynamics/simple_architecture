@@ -23,7 +23,6 @@ final class Mediator {
   final _pipelineInitialized = <bool>[];
   final _behaviorSubjects = <Type, BehaviorSubject<dynamic>>{};
   final _streams = <Type, Stream<dynamic>>{};
-  final _logger = const Logger<Mediator>();
 
   void _purgeAll() {
     _transientPipelines.clear();
@@ -40,7 +39,7 @@ final class Mediator {
   }
 
   void _initialize() {
-    _logger.config("Initializing");
+    logger.config("Initializing");
 
     final priorities =
         _transientPipelines.keys.followedBy(_singletonPipelines.keys).toList();
@@ -51,7 +50,7 @@ final class Mediator {
       final singletonFactory = _singletonPipelines[priority];
 
       if (singletonFactory != null) {
-        _logger.config("Instantiating singleton pipeline behavior #$priority");
+        logger.config("Instantiating singleton pipeline behavior #$priority");
 
         final instance = singletonFactory($services._get);
 
@@ -65,7 +64,7 @@ final class Mediator {
       _pipelineInitialized.add(false);
     }
 
-    _logger.config(
+    logger.config(
       "${_pipeline.length} pipeline behavior${_pipeline.length > 1 ? "s" : ""} "
       "were registered",
     );
@@ -83,14 +82,14 @@ final class Mediator {
     bool registerAsTransient = true,
   }) {
     if (registerAsTransient) {
-      _logger.config("Registering ${IRequest<TResponse>} as transient");
+      logger.config("Registering ${IRequest<TResponse>} as transient");
 
       $services
           .registerTransient<IRequestHandler<TResponse, IRequest<TResponse>>>(
         handlerFactory,
       );
     } else {
-      _logger.config("Registering ${IRequest<TResponse>} as singleton");
+      logger.config("Registering ${IRequest<TResponse>} as singleton");
 
       $services
           .registerSingleton<IRequestHandler<TResponse, IRequest<TResponse>>>(
@@ -133,13 +132,13 @@ final class Mediator {
     }
 
     if (registerAsTransient) {
-      _logger.config(
+      logger.config(
         "Registering $TPipelineBehavior as transient with priority $priority",
       );
 
       _transientPipelines[priority] = handlerFactory;
     } else {
-      _logger.config(
+      logger.config(
         "Registering $TPipelineBehavior as singleton with priority $priority",
       );
 
@@ -150,7 +149,7 @@ final class Mediator {
   /// Creates or fetch a stream to listen to notifications of type
   /// [TNotification].
   Stream<TNotification> getChannel<TNotification extends INotification>() {
-    _logger.debug(() => "Listening to $TNotification");
+    logger.debug(() => "Listening to $TNotification");
 
     final stream = _streams[TNotification];
 
@@ -202,8 +201,8 @@ final class Mediator {
   void publish<TNotification extends INotification>(
     TNotification notification,
   ) {
-    _logger.info("Publishing ${notification.runtimeType}");
-    _logger.debug(() => notification.toString());
+    logger.info("Publishing ${notification.runtimeType}");
+    logger.debug(() => notification.toString());
 
     final bs = _getBehaviorSubject<TNotification>(notification);
 
@@ -225,8 +224,8 @@ final class Mediator {
   Future<TResponse> send<TResponse>(
     IRequest<TResponse> request,
   ) async {
-    _logger.info("Sending ${request.runtimeType}");
-    _logger.debug(() => request.toString());
+    logger.info("Sending ${request.runtimeType}");
+    logger.debug(() => request.toString());
 
     final handler =
         $services.get<IRequestHandler<TResponse, IRequest<TResponse>>>();

@@ -59,3 +59,6 @@
 
 ## 1.231019.5
 * Fixed states not being emitted on load
+
+## 1.231020.1
+* Loggers are no longer instantiated, but rather used as an extension method on `Object` (`this._logger`);

@@ -38,8 +38,24 @@ enum LogLevel {
   debug,
 }
 
-final class Logger<T> {
-  const Logger();
+extension LoggerExtension on Object {
+  static final _loggers = <Type, Logger>{};
+
+  Logger get logger {
+    final logger = _loggers[runtimeType];
+
+    if (logger != null) {
+      return logger;
+    }
+
+    return _loggers[runtimeType] = Logger._(runtimeType);
+  }
+}
+
+final class Logger {
+  const Logger._(this.context);
+
+  final Type context;
 
   static final logLevels = kDebugMode
       ? LogLevel.values
@@ -116,7 +132,9 @@ final class Logger<T> {
   }
 
   void _log(String header, AnsiColors color, String message) {
-    final logName = "$T".startsWith("_") ? "$T".substring(1) : "$T";
+    final logName =
+        "$context".startsWith("_") ? "$context".substring(1) : "$context";
+
     final titleKey = "$logName:${header.substring(header.length - 1)}";
     var title = _titles[titleKey];
 

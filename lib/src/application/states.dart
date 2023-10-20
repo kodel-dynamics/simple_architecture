@@ -6,8 +6,6 @@ part of '../../simple_architecture.dart';
 final class States {
   States._();
 
-  final _logger = const Logger<States>();
-
   /// Register a state manager as a bootable singleton.
   ///
   /// You can inject dependencies into your state and it will automatically
@@ -18,7 +16,7 @@ final class States {
   void registerState<TState extends IState>(
     TState Function(GetDelegate get) stateFactory,
   ) {
-    _logger.config("Registering state for $TState");
+    logger.config("Registering state for $TState");
     $services.registerBootableSingleton(stateFactory);
   }
 

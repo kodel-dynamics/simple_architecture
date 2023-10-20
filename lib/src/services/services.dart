@@ -19,7 +19,6 @@ final class Services {
   final _singletonFactories = <Type, _FactoryDelegate>{};
   final _bootableFactories = <Type, _FactoryDelegate>{};
   final _singletonInstances = <Type, dynamic>{};
-  final _logger = const Logger<Services>();
 
   void _purgeAll() {
     _transientFactories.clear();
@@ -43,7 +42,7 @@ final class Services {
   void registerTransient<TAbstract>(
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    _logger.config("Registering $TAbstract transient");
+    logger.config("Registering $TAbstract transient");
     _registerIn(_transientFactories, delegate);
   }
 
@@ -62,7 +61,7 @@ final class Services {
   void registerSingleton<TAbstract>(
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    _logger.config("Registering $TAbstract singleton");
+    logger.config("Registering $TAbstract singleton");
     _registerIn(_singletonFactories, delegate);
   }
 
@@ -83,7 +82,7 @@ final class Services {
   void registerBootableSingleton<TAbstract>(
     TAbstract Function(GetDelegate get) delegate,
   ) {
-    _logger.config("Registering $TAbstract bootable singleton");
+    logger.config("Registering $TAbstract bootable singleton");
     _registerIn(_bootableFactories, delegate);
   }
 
@@ -158,7 +157,7 @@ final class Services {
     _FactoryDelegate factory,
     bool isTransient,
   ) {
-    _logger.debug(() => "Instantiating $abstractType");
+    logger.debug(() => "Instantiating $abstractType");
 
     final instance = factory(_get);
     final abstractTypeName = "$abstractType";
@@ -170,18 +169,18 @@ final class Services {
 
     final registryType = isTransient ? "transient" : "singleton";
 
-    _logger.debug(
+    logger.debug(
       () => "${instance.runtimeType} instantiated as "
           "$abstractType $registryType",
     );
 
     if (instance is IInitializable) {
-      _logger.debug(() => "Initializing $registryType $typeName");
+      logger.debug(() => "Initializing $registryType $typeName");
       instance.initialize();
     }
 
     if (instance is IBootable && isTransient) {
-      _logger.warning(
+      logger.warning(
         "Boot of $registryType $typeName will be ignored "
         "because it is transient",
       );
