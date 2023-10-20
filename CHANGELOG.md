@@ -62,3 +62,6 @@
 
 ## 1.231020.1
 * Loggers are no longer instantiated, but rather used as an extension method on `Object` (`this._logger`);
+
+## 1.231020.2
+* Removed `fromFailure` from `Response` and added `from` as a factory of `Failure`

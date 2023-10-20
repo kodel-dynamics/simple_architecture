@@ -11,18 +11,6 @@ sealed class Response<TValue, TFailure extends Enum> {
         _exception = exception,
         _failure = failure;
 
-  static Response<TValue, TFailure> fromFailure<TValue, TFailure extends Enum>(
-    Response<dynamic, TFailure> other,
-  ) {
-    assert(other.isFailure, "fromFailure works only when other is failure");
-
-    return Failure<TValue, TFailure>(
-      other.failure,
-      other._exception,
-      other.stackTrace,
-    );
-  }
-
   final TValue? _value;
   TValue get value => _value as TValue;
 
@@ -122,6 +110,15 @@ final class Failure<TValue, TFailure extends Enum>
           failure: failure,
           isSuccess: false,
           stackTrace: stackTrace,
+          value: null,
+        );
+
+  Failure.from(Response<dynamic, TFailure> other)
+      : super._(
+          exception: other._exception,
+          failure: other._failure,
+          isSuccess: false,
+          stackTrace: other.stackTrace,
           value: null,
         );
 }

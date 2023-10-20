@@ -144,7 +144,7 @@ void main() {
 
   test("Copy failure should work", () {
     const f1 = Failure<bool, TestFailure>(TestFailure.failure1);
-    final f2 = Response.fromFailure<int, TestFailure>(f1);
+    final f2 = Failure<int, TestFailure>.from(f1);
 
     expect(f1.failure, TestFailure.failure1);
     expect(f2.failure, TestFailure.failure1);
