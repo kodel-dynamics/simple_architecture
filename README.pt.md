@@ -4,6 +4,8 @@ https://pub.dev/packages/simple_architecture
 
 https://github.com/kodel-dynamics/simple_architecture
 
+![image](https://github.com/kodel-dynamics/simple_architecture/assets/379339/92ea94ad-d95c-4d34-87b1-6b86076c9cbf)
+
 ## Objetivos
 
 ### Reusabilidade
