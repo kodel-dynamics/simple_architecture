@@ -68,3 +68,6 @@
 
 ## 1.231020.3
 * Fixed $mediator notification mixed channel bug
+
+## 1.231021.1
+* Add diagram to README.md
