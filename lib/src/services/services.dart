@@ -143,6 +143,8 @@ final class Services {
     final transientFactory = _transientFactories[TAbstract];
 
     if (transientFactory == null) {
+      logger.error("$TAbstract not registered");
+
       throw ElementNotFoundException(
         message: "There is no registered transient or singleton service "
             "of type $TAbstract",

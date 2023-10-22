@@ -151,14 +151,21 @@ final class Mediator {
   Stream<TNotification> getChannel<TNotification extends INotification>() {
     final channelName = "$TNotification";
 
-    logger.debug(() => "Listening to $channelName");
+    logger.debug(
+      () => "Listening to $channelName "
+          "()",
+    );
 
     final stream = _streams[channelName];
 
     if (stream == null) {
       final subject = _getBehaviorSubject<TNotification>(channelName);
+      final stream = subject.stream;
 
-      return _streams[channelName] = subject.stream;
+      stream.doOnCancel(() => logger.debug(() => "Cancelling stream"));
+      stream.doOnListen(() => logger.debug(() => "Adding listener"));
+
+      return _streams[channelName] = stream;
     }
 
     return stream as Stream<TNotification>;

@@ -71,3 +71,7 @@
 
 ## 1.231021.1
 * Add diagram to README.md
+
+## 1.231022.1
+* Better log
+* Changed `State.change` to protected (a State holder should listen to notifications to apply its own changes)

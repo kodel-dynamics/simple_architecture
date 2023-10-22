@@ -46,6 +46,7 @@ abstract base class BaseState<TValue> extends ChangeNotifier
   Future<void> save(TValue state);
 
   /// Changes the current state of this state holder.
+  @protected
   void change(TValue newState) {
     if (newState == _value) {
       return;

@@ -1,7 +1,7 @@
 name: simple_architecture
 description: Simple Architecture for Flutter apps with Dependency Injection,
   Mediator Pattern and Observable Streams
-version: 1.231021.1
+version: 1.231022.1
 homepage: https://pub.dev/packages/simple_architecture
 repository: https://github.com/kodel-dynamics/simple_architecture
 

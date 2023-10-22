@@ -26,6 +26,7 @@ void main() {
     final state = $states.get<TestState>();
 
     expect(state.value, 0);
+    // ignore: invalid_use_of_protected_member
     state.change(1);
     expect(state.value, 1);
   });
@@ -37,6 +38,7 @@ void main() {
     final state = $states.get<NullableTestState>();
 
     expect(state.value, null);
+    // ignore: invalid_use_of_protected_member
     state.change(1);
     expect(state.value, 1);
   });
@@ -49,6 +51,7 @@ void main() {
     final completer = Completer<int>();
 
     state.addListener(() => completer.complete(state.value));
+    // ignore: invalid_use_of_protected_member
     state.change(1);
 
     expect(completer.isCompleted, true);
@@ -64,6 +67,7 @@ void main() {
 
     final state = $states.get<TestState>();
 
+    // ignore: invalid_use_of_protected_member
     state.change(1);
     expect(state.value, 1);
     expect(TestState._persistedValue, 1);
