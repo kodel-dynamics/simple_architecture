@@ -151,10 +151,7 @@ final class Mediator {
   Stream<TNotification> getChannel<TNotification extends INotification>() {
     final channelName = "$TNotification";
 
-    logger.debug(
-      () => "Listening to $channelName "
-          "()",
-    );
+    logger.debug(() => "Listening to $channelName");
 
     final stream = _streams[channelName];
 
@@ -199,9 +196,19 @@ final class Mediator {
     final subject = _behaviorSubjects[channelName];
 
     if (subject == null) {
-      return _behaviorSubjects[channelName] = seed == null
+      final s = _behaviorSubjects[channelName] = seed == null
           ? BehaviorSubject<TNotification>()
           : BehaviorSubject<TNotification>.seeded(seed);
+
+      s.onCancel = () => logger.info(
+            "Cancelling behavior subject $TNotification",
+          );
+
+      s.onListen = () => logger.info(
+            "Listening behavior subject $TNotification",
+          );
+
+      return s;
     }
 
     return subject as BehaviorSubject<TNotification>;
@@ -219,7 +226,8 @@ final class Mediator {
 
     final bs = _getBehaviorSubject<TNotification>(channelName, notification);
 
-    if (bs.valueOrNull == notification) {
+    if (notification is! IRepeatableNotification &&
+        bs.valueOrNull == notification) {
       return;
     }
 

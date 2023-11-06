@@ -12,3 +12,7 @@ part of '../../simple_architecture.dart';
 /// some other unrelated part of your code can know about it, without the need
 /// of responding to it (that job is for `IQuery<TResponse>`).
 abstract interface class INotification {}
+
+/// Same as [INotification], but the listeners will be notified even if the
+/// same notification is published.
+abstract interface class IRepeatableNotification extends INotification {}

@@ -124,7 +124,7 @@ void main() {
     expect(pipelineBehaviorPriorityOrder, [10, 20, 10, 20]);
   });
 
-  test("Pipeline behaviors duplication as transient should thow", () async {
+  test("Pipeline behaviors duplication as transient should throw", () async {
     $mediator.registerPipelineBehavior(
       10,
       (get) => Priority10PipelineBehavior(),
@@ -304,6 +304,49 @@ void main() {
             count: 1,
           ),
         );
+
+    await lock.future;
+
+    await subscription.cancel();
+  });
+
+  test("Notifications should trigger only once", () async {
+    $mediator.publish(const TestNotification(value: 1));
+    $mediator.publish(const TestNotification(value: 1));
+
+    final lock = Completer<void>();
+
+    final subscription = $mediator.getChannel<TestNotification>().listen(
+          expectAsync1(
+            (notification) {
+              expect(notification.value, 1);
+              lock.complete();
+            },
+            count: 1,
+          ),
+        );
+
+    await lock.future;
+
+    await subscription.cancel();
+  });
+
+  test("Repeatable notifications should trigger more than once", () async {
+    $mediator.publish(const RepeatableTestNotification(value: 1));
+    $mediator.publish(const RepeatableTestNotification(value: 1));
+
+    final lock = Completer<void>();
+
+    final subscription =
+        $mediator.getChannel<RepeatableTestNotification>().listen(
+              expectAsync1(
+                (notification) {
+                  expect(notification.value, 1);
+                  lock.complete();
+                },
+                count: 1,
+              ),
+            );
 
     await lock.future;
 
@@ -581,6 +624,17 @@ final class TestNotification implements INotification {
   @override
   String toString() {
     return "TestNotification($value)";
+  }
+}
+
+final class RepeatableTestNotification implements IRepeatableNotification {
+  const RepeatableTestNotification({required this.value});
+
+  final int value;
+
+  @override
+  String toString() {
+    return "RepeatableTestNotification($value)";
   }
 }
 
