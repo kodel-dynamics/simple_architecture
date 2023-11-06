@@ -171,7 +171,7 @@ void main() {
     );
   });
 
-  test("Dependences should be injected in transient", () async {
+  test("Dependencies should be injected in transient", () async {
     $services.registerTransient<Dependencies>(
       (get) => Dependencies(
         abstract: get<IAbstract>(),
@@ -195,7 +195,7 @@ void main() {
     expect(identical(d1.abstract, d2.abstract), false);
   });
 
-  test("Dependences should be injected in singleton", () async {
+  test("Dependencies should be injected in singleton", () async {
     $services.registerTransient<Dependencies>(
       (get) => Dependencies(
         abstract: get<IAbstract>(),
@@ -218,6 +218,53 @@ void main() {
     expect(InitializableConcrete, d1.initializableAbstract.runtimeType);
     expect(identical(d1.abstract, d2.abstract), true);
   });
+
+  test("Keyed services should differ", () async {
+    $services.registerTransient<IKeyedDependency>(
+      (get) => const KeyedDependency1(),
+      "1",
+    );
+
+    $services.registerTransient<IKeyedDependency>(
+      (get) => const KeyedDependency2(),
+      "2",
+    );
+
+    await SimpleArchitecture.initializeAsync();
+
+    expect(
+      () => $services.get<IKeyedDependency>(),
+      throwsA(const TypeMatcher<ElementNotFoundException>()),
+    );
+
+    final d1 = $services.get<IKeyedDependency>("1");
+
+    expect(KeyedDependency1, d1.runtimeType);
+    expect("1", d1.value);
+
+    final d2 = $services.get<IKeyedDependency>("2");
+
+    expect(KeyedDependency2, d2.runtimeType);
+    expect("2", d2.value);
+  });
+}
+
+abstract interface class IKeyedDependency {
+  String get value;
+}
+
+final class KeyedDependency1 implements IKeyedDependency {
+  const KeyedDependency1();
+
+  @override
+  String get value => "1";
+}
+
+final class KeyedDependency2 implements IKeyedDependency {
+  const KeyedDependency2();
+
+  @override
+  String get value => "2";
 }
 
 abstract interface class IAbstract {

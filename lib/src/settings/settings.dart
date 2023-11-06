@@ -31,7 +31,7 @@ final class Settings {
     }
 
     _settings[T] = setting;
-    $services._replaceSingletonInstance(setting);
+    $services._replaceSingletonInstance(NamedType(type: T, key: null), setting);
     logger.config("Setting $T registered");
     logger.debug(() => setting.toString());
   }
@@ -65,7 +65,7 @@ final class Settings {
     }
 
     _settings[T] = setting;
-    $services._replaceSingletonInstance(setting);
+    $services._replaceSingletonInstance(NamedType(type: T, key: null), setting);
     logger.config("Setting $T replaced");
     logger.debug(() => setting.toString());
   }

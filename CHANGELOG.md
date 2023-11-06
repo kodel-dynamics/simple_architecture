@@ -75,3 +75,7 @@
 ## 1.231022.1
 * Better log
 * Changed `State.change` to protected (a State holder should listen to notifications to apply its own changes)
+
+## 1.231106.1
+* Support for named registrations
+* Support for repeatable notifications (using `IRepeatableNotification` instead of `INotification`). This will trigger notification listeners even if the same notification is published again.

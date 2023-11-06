@@ -57,6 +57,9 @@
       "coverage"
     ],
     "flutter-coverage.lowCoverageThreshold": 50,
-    "flutter-coverage.sufficientCoverageThreshold": 70
+    "flutter-coverage.sufficientCoverageThreshold": 70,
+    "cSpell.words": [
+      "bootables"
+    ]
   }
 }
