@@ -79,3 +79,6 @@
 ## 1.231106.1
 * Support for named registrations
 * Support for repeatable notifications (using `IRepeatableNotification` instead of `INotification`). This will trigger notification listeners even if the same notification is published again.
+
+## 1.231106.2
+* Support for reading the last emitted notification through `getLastNotification<INotification>()`.

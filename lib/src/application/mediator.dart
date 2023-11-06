@@ -168,6 +168,14 @@ final class Mediator {
     return stream as Stream<TNotification>;
   }
 
+  // Gets the last emitted [TNotification], or `null` if no notification has
+  // ever been emitted.
+  TNotification? getLastNotification<TNotification extends INotification>() {
+    final channel = getChannel<TNotification>() as ValueStream<TNotification>;
+
+    return channel.valueOrNull;
+  }
+
   /// Listens to the stream of [TNotification] notifications while the closure
   /// is active, then drops the channel
   Future<T> listenTo<TNotification extends INotification, T>(

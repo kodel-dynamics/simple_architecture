@@ -310,6 +310,30 @@ void main() {
     await subscription.cancel();
   });
 
+  test("Notification values should be readable", () async {
+    final first = $mediator.getLastNotification<TestNotification>();
+
+    expect(null, first);
+
+    const notification1 = TestNotification(value: 1);
+
+    $mediator.publish(notification1);
+
+    final second = $mediator.getLastNotification<TestNotification>();
+
+    expect(notification1, second);
+    expect(second!.value, 1);
+
+    const notification2 = TestNotification(value: 2);
+
+    $mediator.publish(notification2);
+
+    final third = $mediator.getLastNotification<TestNotification>();
+
+    expect(notification2, third);
+    expect(third!.value, 2);
+  });
+
   test("Notifications should trigger only once", () async {
     $mediator.publish(const TestNotification(value: 1));
     $mediator.publish(const TestNotification(value: 1));
