@@ -244,7 +244,7 @@ final class Mediator {
 
   /// Send a message to a registered handler of type [TRequest].
   ///
-  /// The appropriated [IRequestHandler<TRespone, TRequest>] will be called
+  /// The appropriated [IRequestHandler<TResponse, TRequest>] will be called
   /// to handle this message.
   ///
   /// The pipeline will run in the order specify by priority (the lower, the
