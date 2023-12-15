@@ -82,3 +82,6 @@
 
 ## 1.231106.2
 * Support for reading the last emitted notification through `getLastNotification<INotification>()`.
+
+## 1.231215.1
+* Notification channels can now be disposable (e.g.: dispose channels when an user has signed out).

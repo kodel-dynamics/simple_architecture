@@ -462,6 +462,52 @@ void main() {
     );
   });
 
+  test("Notifications should be disposable", () async {
+    $mediator.getChannel<DisposableNotification>();
+    expect($mediator.getLastNotification<DisposableNotification>(), null);
+    const DisposableNotification(value: 1).publish();
+
+    expect(
+      $mediator.getLastNotification<DisposableNotification>(),
+      const DisposableNotification(value: 1),
+    );
+
+    $mediator.disposeChannel<DisposableNotification>();
+    expect($mediator.getLastNotification<DisposableNotification>(), null);
+    $mediator.getChannel<DisposableNotification>();
+    expect($mediator.getLastNotification<DisposableNotification>(), null);
+  });
+
+  test("Repeatable notifications should be disposable", () async {
+    $mediator.getChannel<RepeatableDisposableNotification>();
+
+    expect(
+      $mediator.getLastNotification<RepeatableDisposableNotification>(),
+      null,
+    );
+
+    const RepeatableDisposableNotification(value: 1).publish();
+
+    expect(
+      $mediator.getLastNotification<RepeatableDisposableNotification>(),
+      const RepeatableDisposableNotification(value: 1),
+    );
+
+    $mediator.disposeChannel<RepeatableDisposableNotification>();
+
+    expect(
+      $mediator.getLastNotification<RepeatableDisposableNotification>(),
+      null,
+    );
+
+    $mediator.getChannel<RepeatableDisposableNotification>();
+
+    expect(
+      $mediator.getLastNotification<RepeatableDisposableNotification>(),
+      null,
+    );
+  });
+
   test("Transient IInitializable pipeline should work", () async {
     $mediator.registerPipelineBehavior(
       10,
@@ -659,6 +705,29 @@ final class RepeatableTestNotification implements IRepeatableNotification {
   @override
   String toString() {
     return "RepeatableTestNotification($value)";
+  }
+}
+
+final class DisposableNotification implements INotification {
+  const DisposableNotification({required this.value});
+
+  final int value;
+
+  @override
+  String toString() {
+    return "DisposableNotification($value)";
+  }
+}
+
+final class RepeatableDisposableNotification
+    implements IRepeatableNotification {
+  const RepeatableDisposableNotification({required this.value});
+
+  final int value;
+
+  @override
+  String toString() {
+    return "RepeatableDisposableNotification($value)";
   }
 }
 

@@ -159,13 +159,32 @@ final class Mediator {
       final subject = _getBehaviorSubject<TNotification>(channelName);
       final stream = subject.stream;
 
-      stream.doOnCancel(() => logger.debug(() => "Cancelling stream"));
-      stream.doOnListen(() => logger.debug(() => "Adding listener"));
+      // coverage:ignore-start
+      stream.doOnCancel(() => logger.debug(
+            () => "Cancelling notification channel $TNotification",
+          ));
+
+      stream.doOnListen(
+        () => logger.debug(
+            () => "Adding notification listener to channel $TNotification"),
+      );
+      // coverage:ignore-end
 
       return _streams[channelName] = stream;
     }
 
     return stream as Stream<TNotification>;
+  }
+
+  /// Disposes the stream to listen to notifications of type
+  /// [TNotification], removing all previous values.
+  void disposeChannel<TNotification extends INotification>() {
+    final channelName = "$TNotification";
+
+    logger.debug(() => "Disposing $channelName");
+
+    _streams.remove(channelName);
+    _behaviorSubjects.remove(channelName);
   }
 
   // Gets the last emitted [TNotification], or `null` if no notification has
