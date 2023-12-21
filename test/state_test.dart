@@ -81,6 +81,27 @@ void main() {
 
     expect(hydratedState.value, 1);
   });
+
+  test("States should not persist", () async {
+    $states.registerState((get) => TestState());
+    await $initializeAsync();
+
+    final state = $states.get<TestState>();
+
+    // ignore: invalid_use_of_protected_member
+    state.change(1, saveNewState: false);
+    expect(state.value, 1);
+    expect(TestState._persistedValue, 0);
+
+    SimpleArchitecture.purgeAll();
+
+    $states.registerState((get) => TestState());
+    await $initializeAsync();
+
+    final hydratedState = $states.get<TestState>();
+
+    expect(hydratedState.value, 0);
+  });
 }
 
 final class TestState extends BaseState<int> {

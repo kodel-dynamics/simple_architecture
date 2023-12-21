@@ -85,3 +85,6 @@
 
 ## 1.231215.1
 * Notification channels can now be disposable (e.g.: dispose channels when an user has signed out).
+
+## 1.23.1220.1
+* Now is possible to change an state without saving it (use case: the state is controlled by a database stream that will change the state every time the db changes)

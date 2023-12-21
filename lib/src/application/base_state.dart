@@ -47,7 +47,7 @@ abstract base class BaseState<TValue> extends ChangeNotifier
 
   /// Changes the current state of this state holder.
   @protected
-  void change(TValue newState) {
+  void change(TValue newState, {bool saveNewState = true}) {
     if (newState == _value) {
       return;
     }
@@ -56,7 +56,11 @@ abstract base class BaseState<TValue> extends ChangeNotifier
     logger.debug(() => toString());
 
     _value = newState;
-    save(newState);
+
+    if (saveNewState) {
+      save(newState);
+    }
+
     notifyListeners();
   }
 
